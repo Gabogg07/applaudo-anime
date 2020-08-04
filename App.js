@@ -28,7 +28,11 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="ShowDetail" component={ShowDetailScreen} />
+        <Stack.Screen 
+          name="ShowDetail" 
+          component={ShowDetailScreen} 
+          options={{header:()=>null}}
+        />
       </Stack.Navigator>
 
     </NavigationContainer>
