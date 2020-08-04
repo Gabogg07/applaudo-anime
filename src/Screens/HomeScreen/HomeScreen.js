@@ -11,15 +11,25 @@ class Home extends Component {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={{ marginHorizontal:5 }}>
         <Text> Anime </Text>
         <HorizontalList/>
-        <Text> Anime </Text>
 
+        {/* <Text> Anime </Text>
         <HorizontalList/>
-        <Text> Anime </Text>
 
+        <Text> Anime </Text>
         <HorizontalList/>
+        
+        <Text> Anime </Text>
+        <HorizontalList/>
+        
+        <Text> Anime </Text>
+        <HorizontalList/>
+
+        <Text> Anime </Text>
+        <HorizontalList/> */}
       </ScrollView>
     );
   }

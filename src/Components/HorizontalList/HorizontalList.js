@@ -16,7 +16,6 @@ class HorizontalList extends Component {
       <View>
 
         <FlatList
-          style={{margin:10}}
           horizontal
           data={animes.data}
           renderItem={({item: show}) => {
