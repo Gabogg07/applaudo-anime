@@ -30,6 +30,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="ShowDetail" component={ShowDetailScreen} />
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 }

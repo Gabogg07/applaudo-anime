@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
+import HorizontalList from '../../Components/HorizontalList/HorizontalList'
 
 class Home extends Component {
   constructor(props) {
@@ -10,9 +11,16 @@ class Home extends Component {
 
   render() {
     return (
-      <View>
-        <Text> Home </Text>
-      </View>
+      <ScrollView>
+        <Text> Anime </Text>
+        <HorizontalList/>
+        <Text> Anime </Text>
+
+        <HorizontalList/>
+        <Text> Anime </Text>
+
+        <HorizontalList/>
+      </ScrollView>
     );
   }
 }
