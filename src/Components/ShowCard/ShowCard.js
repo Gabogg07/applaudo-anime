@@ -19,7 +19,7 @@ class ShowCard extends Component {
     const {show, navigation} = props;
     return (
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('ShowDetail', {show})}>
+        onPress={() => navigation.navigate('ShowDetail', {showId: show.id})}>
         <View style={styles.cardContainer}>
           <Image
             style={[styles.showImage, props.styles]}

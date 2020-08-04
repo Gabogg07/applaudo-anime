@@ -1,5 +1,15 @@
-import React, { Component } from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image, StyleSheet} from 'react-native';
+import React, {Component} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
+import {fetchShowDetail} from '../../Store/APICalls';
+import {connect} from 'react-redux';
 
 const titlesList = [
   'Main Title',
@@ -19,8 +29,12 @@ class ShowDetail extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.props.fetchShowDetail(this.props.route.params.showId);
+  }
+
   renderTitleValuePair = (title, value) => (
-    <View style={styles.titlesContainer}>
+    <View style={styles.titlesContainer} key={title}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.text}>{value}</Text>
     </View>
@@ -31,32 +45,50 @@ class ShowDetail extends Component {
   };
 
   getTitleValuePairs = () => {
-    const {attributes} = this.props.route.params.show;
+    const {attributes} = this.props.show;
     return {
-      'Main Title': (attributes.titles.en || attributes.titles.en_jp),
+      'Main Title': attributes.titles.en || attributes.titles.en_jp,
       'Canonical Title': attributes.canonicalTitle,
-      'Type': `${attributes.showType}, ${attributes.episodeCount} ${attributes.episodeCount == 1 ? 'episode' : 'episodes'}`,
-      'Year': `${this.formatDate(attributes.startDate)} till ${this.formatDate(attributes.endDate)}`,
-      'Genres': 'Lista generos',
+      Type: `${attributes.showType}, ${attributes.episodeCount} ${
+        attributes.episodeCount == 1 ? 'episode' : 'episodes'
+      }`,
+      Year: `${this.formatDate(attributes.startDate)} till ${this.formatDate(
+        attributes.endDate,
+      )}`,
+      Genres: 'Lista generos',
       'Average Rating': attributes.averageRating,
       'Episode Duration': `${attributes.episodeLength} mins`,
       'Age Rating': attributes.ageRating,
       'Airing Status': attributes.status,
-      'Synopsis': attributes.synopsis
+      Synopsis: attributes.synopsis,
     };
   };
 
   render() {
-    const {show} = this.props.route.params;
-    const titles = this.getTitleValuePairs();
+    const {show} = this.props;
 
-    if (!show) {
+    if (show.loading || !show.id) {
       return (
-        <View style={styles.titlesContainer}>
-          <Text> No show was provided</Text>
+        <View style={styles.messageView}>
+          <ActivityIndicator size="large" color="white" />
+          <Text style={styles.title}>Loading</Text>
         </View>
       );
     }
+
+    if (show.error) {
+      return (
+        <View style={styles.messageView}>
+          <Text style={styles.title}>
+            Sorry there was an error loading the data
+          </Text>
+          <Text style={styles.title}>Please go back and reload</Text>
+        </View>
+      );
+    }
+
+    console.log(Object.keys(show.attributes));
+    const titles = this.getTitleValuePairs();
 
     return (
       <SafeAreaView style={styles.safeArea}>
@@ -80,12 +112,24 @@ class ShowDetail extends Component {
             {this.renderTitleValuePair(titlesList[4], titles[titlesList[4]])}
             <View style={styles.gridContainer}>
               <View style={styles.gridItem}>
-                {this.renderTitleValuePair(titlesList[5], titles[titlesList[5]])}
-                {this.renderTitleValuePair(titlesList[6], titles[titlesList[6]])}
+                {this.renderTitleValuePair(
+                  titlesList[5],
+                  titles[titlesList[5]],
+                )}
+                {this.renderTitleValuePair(
+                  titlesList[6],
+                  titles[titlesList[6]],
+                )}
               </View>
               <View style={styles.gridItem}>
-                {this.renderTitleValuePair(titlesList[7], titles[titlesList[7]])}
-                {this.renderTitleValuePair(titlesList[8], titles[titlesList[8]])}
+                {this.renderTitleValuePair(
+                  titlesList[7],
+                  titles[titlesList[7]],
+                )}
+                {this.renderTitleValuePair(
+                  titlesList[8],
+                  titles[titlesList[8]],
+                )}
               </View>
             </View>
           </View>
@@ -96,9 +140,23 @@ class ShowDetail extends Component {
   }
 }
 
-export default ShowDetail;
+const mapStateToProps = (state) => ({
+  show: state.show,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchShowDetail: (showId) => dispatch(fetchShowDetail(showId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShowDetail);
 
 const styles = StyleSheet.create({
+  messageView: {
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
   safeArea: {
     backgroundColor: 'black',
   },
@@ -106,7 +164,6 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   showImage: {
-    aspectRatio: 3 / 4,
     flex: 3,
   },
   upperContainer: {
@@ -130,7 +187,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   middleContainer: {
-    marginVertical: 20,
+    marginVertical: 15,
   },
   gridContainer: {
     flexDirection: 'row',
