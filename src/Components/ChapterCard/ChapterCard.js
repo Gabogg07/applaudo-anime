@@ -14,8 +14,7 @@ class ChapterCard extends Component {
     this.state = {};
   }
 
-  componentDidMount(){}
-
+  componentDidMount() {}
 
   render() {
     const {props} = this;
@@ -26,7 +25,10 @@ class ChapterCard extends Component {
         <View style={styles.cardContainer}>
           <Image
             style={[styles.showImage, props.styles]}
-            source={{uri: data.attributes.thumbnail && data.attributes.thumbnail.original}}
+            source={{
+              uri:
+                data.attributes.thumbnail && data.attributes.thumbnail.original,
+            }}
           />
           <View style={[props.styles, styles.titleContainer]}>
             <Text style={styles.title}>
@@ -60,7 +62,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
-  },
+  title: {},
 });
-

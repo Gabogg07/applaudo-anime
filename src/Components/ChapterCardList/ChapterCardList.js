@@ -24,7 +24,11 @@ class ChapterCardList extends Component {
 
   onEndReached = () => {
     const {props, state} = this;
-    if (!props.chapters.loading && props.chapters.links.next && state.enabledLoadMore) {
+    if (
+      !props.chapters.loading &&
+      props.chapters.links.next &&
+      state.enabledLoadMore
+    ) {
       this.props.fetchShowChapter(
         props.showId,
         this.fixUrl(props.chapters.links.next),
@@ -38,18 +42,20 @@ class ChapterCardList extends Component {
     return url3;
   };
 
-
   componentWillUnmount() {
     this.props.cleanShowData();
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.chapters.data && nextProps.chapters.data.length !== prevState.listLength){
-      return ({
+    if (
+      nextProps.chapters.data &&
+      nextProps.chapters.data.length !== prevState.listLength
+    ) {
+      return {
         chapters: nextProps.chapters.data,
         listLength: nextProps.chapters.data.length,
         enabledLoadMore: true,
-      });
+      };
     }
 
     return null;
@@ -75,13 +81,17 @@ class ChapterCardList extends Component {
               </View>
             );
           }}
-          renderFooter={()=>{
+          renderFooter={() => {
             return (
               <View
-              style={{justifyContent: 'center', alignSelf: 'center', width:50}}>
+                style={{
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  width: 50,
+                }}>
                 <ActivityIndicator size="large" color="white" />
               </View>
-            )
+            );
           }}
           onEndReached={this.onEndReached}
         />
