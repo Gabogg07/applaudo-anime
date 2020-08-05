@@ -16,8 +16,6 @@ import {
   changeShowGenresLoadingState,
   loadShowGenresSuccess,
   loadShowGenresError,
-  loadSpecificGenreSucess,
-  loadSpecificGenreError,
 
 } from '../Store/actions';
 
@@ -115,24 +113,6 @@ export function fetchShowGenres(showId) {
       })
       .catch((error) => {
         dispatch(loadShowGenresError(error));
-      });
-  };
-}
-
-export function fetchGenreById(url, genreId){
-  console.log(url)
-  return (dispatch) => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadSpecificGenreSucess(res, genreId));
-        return res;
-      })
-      .catch((error) => {
-        dispatch(loadSpecificGenreError(genreId));
       });
   };
 }

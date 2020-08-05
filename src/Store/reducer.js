@@ -16,7 +16,6 @@ import {
   LOAD_SHOW_GENRES_SUCCESS,
   LOAD_SHOW_GENRES_ERROR,
   LOADING_SHOW_GENRES,
-  LOAD_SPECIFIC_GENRE_SUCCESS,
 } from './actionTypes';
 
 const initialState = {
@@ -147,25 +146,25 @@ const reducer = (state = initialState, action) => {
           },
         },
       };
-    
+
     case LOAD_SHOW_GENRES_SUCCESS:
-      return{
+      return {
         ...state,
-        genres:{
+        genres: {
           ...state.genres,
-          loading:false,
-          list: action.genres
-        }
-      }
+          loading: false,
+          data: action.genres,
+        },
+      };
 
     case LOAD_SHOW_GENRES_ERROR:
       return {
         ...state,
-        genres:{
+        genres: {
           ...state.genres,
           error: true,
           loading: false,
-        }
+        },
       };
 
     case LOADING_SHOW_GENRES:
@@ -174,19 +173,6 @@ const reducer = (state = initialState, action) => {
         genres: {
           ...state.genres,
           loading: !state.genres.loading,
-        },
-      };
-
-    case LOAD_SPECIFIC_GENRE_SUCCESS:
-      console.log(action.genre)
-      return {
-        ...state,
-        genres: {
-          ...state.genres,
-          data: {
-            ...state.genres.data,
-            [action.genreId]: action.genre,
-          },
         },
       };
 
@@ -211,12 +197,11 @@ const reducer = (state = initialState, action) => {
         show: {
           ...emptyData,
         },
-        genres:{
+        genres: {
           ...emptyData,
           links: {},
-          data: {},
-          list: [],
-        }
+          data: [],
+        },
       };
 
     default:

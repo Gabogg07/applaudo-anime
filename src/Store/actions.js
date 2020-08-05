@@ -18,8 +18,6 @@ import {
   LOAD_SHOW_GENRES_SUCCESS,
   LOAD_SHOW_GENRES_ERROR,
   LOADING_SHOW_GENRES,
-  LOAD_SPECIFIC_GENRE_SUCCESS,
-  LOAD_SPECIFIC_GENRE_ERROR,
 } from './actionTypes';
 
 export const loadShowsSuccess = (shows, showType) => {
@@ -142,18 +140,3 @@ export const changeShowGenresLoadingState = () => {
     type: LOADING_SHOW_GENRES,
   };
 };
-
-export const loadSpecificGenreSucess = (genre, genreId) => {
-  return {
-    type: LOAD_SPECIFIC_GENRE_SUCCESS,
-    genre,
-    genreId,
-  }
-}
-
-export const loadSpecificGenreError = (genreId) => {
-  return {
-    type: LOAD_SPECIFIC_GENRE_ERROR,
-    genreId,
-  }
-}

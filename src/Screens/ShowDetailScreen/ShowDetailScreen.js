@@ -8,11 +8,10 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import {fetchShowDetail} from '../../Store/APICalls';
+import {fetchShowDetail, fetchShowGenres} from '../../Store/APICalls';
 import {connect} from 'react-redux';
 import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
 import CharacterList from '../../Components/CharacterCardList/CharacterCardList';
-import GenresList from '../../Components/GenresList/GenresList';
 import YoutubeButton from '../../Components/YoutubeButton/YoutubeButton';
 
 const titlesList = [
@@ -35,12 +34,13 @@ class ShowDetail extends Component {
 
   componentDidMount() {
     this.props.fetchShowDetail(this.props.route.params.showId);
+    this.props.fetchShowGenres(this.props.route.params.showId);
   }
 
   renderTitleValuePair = (title, value) => (
     <View style={styles.titlesContainer} key={title}>
       <Text style={styles.title}>{title}</Text>
-      {title === 'Genres' ? value : <Text style={styles.text}>{value}</Text>}
+      <Text style={styles.text}>{value}</Text>
     </View>
   );
 
@@ -54,7 +54,7 @@ class ShowDetail extends Component {
       'Main Title': attributes.titles.en || attributes.titles.en_jp,
       'Canonical Title': attributes.canonicalTitle,
       Type: `${attributes.showType}, ${attributes.episodeCount} ${
-        attributes.episodeCount == 1 ? 'episode' : 'episodes'
+        attributes.episodeCount === 1 ? 'episode' : 'episodes'
       }`,
       Year: `${this.formatDate(attributes.startDate)} till ${this.formatDate(
         attributes.endDate,
@@ -65,6 +65,13 @@ class ShowDetail extends Component {
       'Airing Status': attributes.status,
       Synopsis: attributes.synopsis,
     };
+  };
+
+  listGenres = () => {
+    let genresArray = this.props.genres.data.map(
+      (genre) => genre.attributes.name,
+    );
+    return genresArray.join(' ');
   };
 
   render() {
@@ -111,8 +118,7 @@ class ShowDetail extends Component {
             </View>
           </View>
           <View style={styles.middleContainer}>
-
-            <GenresList showId={show.id} />
+            {this.renderTitleValuePair(titlesList[4], this.listGenres())}
 
             <View style={styles.gridContainer}>
               <View style={styles.gridItem}>
@@ -164,10 +170,12 @@ class ShowDetail extends Component {
 
 const mapStateToProps = (state) => ({
   show: state.show,
+  genres: state.genres,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchShowDetail: (showId) => dispatch(fetchShowDetail(showId)),
+  fetchShowGenres: (showId) => dispatch(fetchShowGenres(showId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowDetail);
