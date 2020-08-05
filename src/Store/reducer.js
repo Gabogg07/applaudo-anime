@@ -6,12 +6,12 @@ import {
   CLEAN_SHOW_DATA,
   LOADING_SHOWS,
   LOADING_SHOW_DATA,
-  LOAD_SHOW_CHARACTERS_SUCCESS, 
-  LOAD_SHOW_CHARACTERS_ERROR, 
-  LOADING_SHOW_CHARACTERS, 
-  LOAD_SHOW_CHAPTERS_SUCCESS, 
-  LOAD_SHOW_CHAPTERS_ERROR, 
-  LOADING_SHOW_CHAPTERS
+  LOAD_SHOW_CHARACTERS_SUCCESS,
+  LOAD_SHOW_CHARACTERS_ERROR,
+  LOADING_SHOW_CHARACTERS,
+  LOAD_SHOW_CHAPTERS_SUCCESS,
+  LOAD_SHOW_CHAPTERS_ERROR,
+  LOADING_SHOW_CHAPTERS,
 } from './actionTypes';
 
 const initialState = {
@@ -19,6 +19,18 @@ const initialState = {
     error: false,
     loading: false,
   },
+  chapters: {
+    error: false,
+    loading: false,
+    data: [],
+    links: {},
+  },
+  characters: {
+    error: false,
+    loading: false,
+    data:[],
+  },
+  data:[],
 };
 
 const reducer = (state = initialState, action) => {
@@ -54,30 +66,64 @@ const reducer = (state = initialState, action) => {
     case LOAD_SHOW_CHARACTERS_SUCCESS:
       return {
         ...state,
-        characters:{
-          error:false,
-          loading:false,
-          ...action.characters
-        }
-      }
+        characters: {
+          error: false,
+          loading: false,
+          data: action.characters,
+        },
+      };
 
     case LOAD_SHOW_CHARACTERS_ERROR:
       return {
         ...state,
-        chapters:{
-          error:true,
-          loading:false,
-        }
-      }
+        characters: {
+          error: true,
+          loading: false,
+        },
+      };
 
-      case LOADING_SHOW_CHARACTERS:
-        return {
-          ...state,
-          characters:{
-            ...state.characters,
-            loading: !state.characters.loading,
-          }
-        }
+    case LOADING_SHOW_CHARACTERS:
+      return {
+        ...state,
+        characters: {
+          ...state.characters,
+          loading: !state.characters.loading,
+        },
+      };
+
+    case LOAD_SHOW_CHAPTERS_ERROR:
+      return {
+        ...state,
+        chapters: {
+          error: true,
+          loading: false,
+        },
+      };
+
+    case LOAD_SHOW_CHAPTERS_SUCCESS:
+      console.log(action.chapters.links)
+      let data = [...state.data, ...action.chapters.data];
+      return {
+        ...state,
+        data : data,
+        chapters: {
+          ...state.chapters,
+          error: false,
+          loading: false,
+          data: state.chapters.data.concat(...action.chapters.data),
+          links: action.chapters.links,
+          endReached: data.length >= action.chapters.meta.count,
+        },
+      };
+
+    case LOADING_SHOW_CHAPTERS:
+      return {
+        ...state,
+        chapters: {
+          ...state.characters,
+          loading: !state.chapters.loading,
+        },
+      };
 
     default:
       return state;

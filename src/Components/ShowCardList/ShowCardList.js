@@ -4,7 +4,7 @@ import ShowCard from '../ShowCard/ShowCard';
 
 const {width} = Dimensions.get('window');
 
-class HorizontalList extends Component {
+class ShowCardList extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -19,7 +19,7 @@ class HorizontalList extends Component {
           data={animes.data}
           renderItem={({item: show}) => {
             // return <Text>{show.attributes.slug}</Text>
-            return <ShowCard styles={{width: width / 4}} show={show} />;
+            return <ShowCard styles={{width: width / 4}} data={show}/>;
           }}
         />
       </View>
@@ -27,7 +27,7 @@ class HorizontalList extends Component {
   }
 }
 
-export default HorizontalList;
+export default ShowCardList;
 
 const animes = {
   "data": [

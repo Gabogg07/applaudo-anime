@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, StyleSheet} from 'react-native';
-import HorizontalList from '../../Components/HorizontalList/HorizontalList'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux'
 import {loadShowsSuccess} from '../../Store/actions'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import ShowCardList from '../../Components/ShowCardList/ShowCardList';
 
 class Home extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class Home extends Component {
         <ScrollView
           style={styles.scrollView}>
           <Text style={styles.title}> Anime </Text>
-          <HorizontalList />
+          <ShowCardList />
           <TouchableWithoutFeedback onPress={()=>{ this.props.loadShows()}}>
             <Text style={styles.title}>redux test call</Text>
           </TouchableWithoutFeedback>

@@ -8,10 +8,13 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-class ShowCard extends Component {
+class ChapterCard extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount(){
   }
 
   render() {
@@ -23,7 +26,7 @@ class ShowCard extends Component {
         <View style={styles.cardContainer}>
           <Image
             style={[styles.showImage, props.styles]}
-            source={{uri: data.attributes.posterImage.medium}}
+            source={{uri: data.attributes.thumbnail.original}}
           />
           <View style={[props.styles, styles.titleContainer]}>
             <Text style={styles.title}>
@@ -39,7 +42,7 @@ class ShowCard extends Component {
 export default function (props) {
   const navigation = useNavigation();
 
-  return <ShowCard {...props} navigation={navigation} />;
+  return <ChapterCard {...props} navigation={navigation} />;
 }
 
 const styles = StyleSheet.create({

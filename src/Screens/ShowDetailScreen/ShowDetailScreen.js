@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {fetchShowDetail} from '../../Store/APICalls';
 import {connect} from 'react-redux';
+import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
 
 const titlesList = [
   'Main Title',
@@ -134,6 +135,11 @@ class ShowDetail extends Component {
             </View>
           </View>
           {this.renderTitleValuePair(titlesList[9], titles[titlesList[9]])}
+
+          <View style={styles.chapterList}>
+            <Text style={styles.title}>Episodes</Text>
+            <ChapterCardList showId={this.props.show.id} />
+          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -194,5 +200,8 @@ const styles = StyleSheet.create({
   },
   gridItem: {
     flex: 1,
+  },
+  chapterList: {
+    marginVertical: 5,
   },
 });
