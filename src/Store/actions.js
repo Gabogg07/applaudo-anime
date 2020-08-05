@@ -12,6 +12,9 @@ import {
   LOAD_SHOW_CHAPTERS_SUCCESS,
   LOAD_SHOW_CHAPTERS_ERROR,
   LOADING_SHOW_CHAPTERS,
+  LOAD_SPECIFIC_CHARACTER_SUCCESS,
+  LOAD_SPECIFIC_CHARACTER_ERROR,
+  LOADING_SPECIFIC_CHARACTER,
 } from './actionTypes';
 
 export const loadShowsSuccess = (shows, showType) => {
@@ -70,6 +73,28 @@ export const loadShowCharactersError = () => {
 export const changeShowCharactersLoadingState = () => {
   return {
     type: LOADING_SHOW_CHARACTERS,
+  };
+};
+
+export const loadSpecificCharacterSuccess = (character, characterId) => {
+  return {
+    type: LOAD_SPECIFIC_CHARACTER_SUCCESS,
+    character,
+    characterId,
+  };
+};
+
+export const loadSpecificCharacterError = (characterId) => {
+  return {
+    type: LOAD_SPECIFIC_CHARACTER_ERROR,
+    characterId,
+  };
+};
+
+export const changeSpecificCharacterLoadingState = (characterId) => {
+  return {
+    type: LOADING_SPECIFIC_CHARACTER,
+    characterId,
   };
 };
 

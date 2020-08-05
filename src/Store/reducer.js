@@ -12,6 +12,9 @@ import {
   LOAD_SHOW_CHAPTERS_SUCCESS,
   LOAD_SHOW_CHAPTERS_ERROR,
   LOADING_SHOW_CHAPTERS,
+  LOAD_SPECIFIC_CHARACTER_SUCCESS,
+  LOAD_SPECIFIC_CHARACTER_ERROR,
+  LOADING_SPECIFIC_CHARACTER,
 } from './actionTypes';
 
 const initialState = {
@@ -28,9 +31,10 @@ const initialState = {
   characters: {
     error: false,
     loading: false,
-    data:[],
+    list: [],
+    data: {},
+    links: {},
   },
-  data:[],
 };
 
 const reducer = (state = initialState, action) => {
@@ -64,12 +68,15 @@ const reducer = (state = initialState, action) => {
       };
 
     case LOAD_SHOW_CHARACTERS_SUCCESS:
+      console.log(state.characters.list, action.characters.data);
       return {
         ...state,
         characters: {
+          ...state.characters,
           error: false,
           loading: false,
-          data: action.characters,
+          list: [...state.characters.list, ...action.characters.data],
+          links: action.characters.links,
         },
       };
 
@@ -77,6 +84,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         characters: {
+          ...state.characters,
           error: true,
           loading: false,
         },
@@ -121,28 +129,40 @@ const reducer = (state = initialState, action) => {
         },
       };
 
+    case LOAD_SPECIFIC_CHARACTER_SUCCESS:
+      return {
+        ...state,
+        characters: {
+          ...state.characters,
+          data: {
+            ...state.characters.data,
+            [action.characterId]: action.character,
+          },
+        },
+      };
+
     case CLEAN_SHOW_DATA:
-      console.log('limpiando')
       let emptyData = {
         error: false,
         loading: false,
-      }
+      };
       return {
         ...state,
-        chapters:{
+        chapters: {
           ...emptyData,
-          links:{},
-          data:[],
+          links: {},
+          data: [],
         },
-        characters:{
+        characters: {
           ...emptyData,
-          links:{},
-          data:[],
+          links: {},
+          data: {},
+          list: [],
         },
-        show:{
-          ...emptyData
-        }
-      }
+        show: {
+          ...emptyData,
+        },
+      };
 
     default:
       return state;

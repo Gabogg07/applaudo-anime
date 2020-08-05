@@ -11,6 +11,7 @@ import {
 import {fetchShowDetail} from '../../Store/APICalls';
 import {connect} from 'react-redux';
 import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
+import CharacterList from '../../Components/CharacterCardList/CharacterCardList';
 
 const titlesList = [
   'Main Title',
@@ -88,7 +89,6 @@ class ShowDetail extends Component {
       );
     }
 
-    console.log(Object.keys(show.attributes));
     const titles = this.getTitleValuePairs();
 
     return (
@@ -142,6 +142,11 @@ class ShowDetail extends Component {
               <ChapterCardList showId={this.props.show.id} />
             </View>
           }
+
+          <View style={styles.chapterList}>
+            <Text style={styles.title}>Characters</Text>
+            <CharacterList showId={this.props.show.id} />
+          </View>
         </ScrollView>
       </SafeAreaView>
     );
