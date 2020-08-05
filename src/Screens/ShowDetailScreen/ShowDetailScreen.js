@@ -12,8 +12,8 @@ import {fetchShowDetail} from '../../Store/APICalls';
 import {connect} from 'react-redux';
 import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
 import CharacterList from '../../Components/CharacterCardList/CharacterCardList';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import YoutubeButton from '../../Components/YoutubeButton/YoutubeButton'
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import YoutubeButton from '../../Components/YoutubeButton/YoutubeButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const titlesList = [
@@ -139,23 +139,23 @@ class ShowDetail extends Component {
           </View>
           {this.renderTitleValuePair(titlesList[9], titles[titlesList[9]])}
 
-                <YoutubeButton />
+          {show.attributes.youtubeVideoId &&
+            <YoutubeButton youtubeId={show.attributes.youtubeVideoId}/>
+          }
 
-                  {/** Episodes segment */}
-          {show.attributes.episodeCount > 2 &&
+          {/** Episodes segment */}
+          {show.attributes.episodeCount > 2 && (
             <View style={styles.chapterList}>
               <Text style={styles.title}>Episodes</Text>
               <ChapterCardList showId={this.props.show.id} />
             </View>
-          }
+          )}
 
-                  {/** Characters segment */}
+          {/** Characters segment */}
           <View style={styles.chapterList}>
             <Text style={styles.title}>Characters</Text>
             <CharacterList showId={this.props.show.id} />
           </View>
-
-          
         </ScrollView>
       </SafeAreaView>
     );
