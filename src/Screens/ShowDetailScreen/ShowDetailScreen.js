@@ -136,10 +136,12 @@ class ShowDetail extends Component {
           </View>
           {this.renderTitleValuePair(titlesList[9], titles[titlesList[9]])}
 
-          <View style={styles.chapterList}>
-            <Text style={styles.title}>Episodes</Text>
-            <ChapterCardList showId={this.props.show.id} />
-          </View>
+          {show.attributes.episodeCount > 2 &&
+            <View style={styles.chapterList}>
+              <Text style={styles.title}>Episodes</Text>
+              <ChapterCardList showId={this.props.show.id} />
+            </View>
+          }
         </ScrollView>
       </SafeAreaView>
     );

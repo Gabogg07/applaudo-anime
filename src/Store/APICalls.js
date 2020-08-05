@@ -51,25 +51,20 @@ export function fetchShowCharacters(showId, url) {
   };
 }
 
-export function fetchShowChapter(showId, skip = 0) {
+export function fetchShowChapter(showId, url) {
   return (dispatch) => {
-    let url = `https://kitsu.io/api/edge/anime/${showId}/episodes`
-    if(skip) url = url + '?page[limit]=10&page[offset]=' + skip
-
-    console.log('LLAMANDO CON',skip, url)
+    if(!url) url = `https://kitsu.io/api/edge/anime/${showId}/episodes`
     dispatch(changeShowChaptersLoadingState());
-    fetch(`https://kitsu.io/api/edge/anime/${showId}/episodes`)
+    fetch(url)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
           throw res.error;
         }
-        // console.log('RECIBO', res.links)
         dispatch(loadShowChaptersSuccess(res));
         return res.products;
       })
       .catch((error) => {
-        console.log('ERROR OTRA VEZ')
         dispatch(loadShowChaptersError(error));
       });
   };

@@ -101,18 +101,14 @@ const reducer = (state = initialState, action) => {
       };
 
     case LOAD_SHOW_CHAPTERS_SUCCESS:
-      console.log(action.chapters.links)
-      let data = [...state.data, ...action.chapters.data];
+      let data = [...state.chapters.data, ...action.chapters.data];
       return {
         ...state,
-        data : data,
         chapters: {
-          ...state.chapters,
           error: false,
           loading: false,
-          data: state.chapters.data.concat(...action.chapters.data),
+          data: data,
           links: action.chapters.links,
-          endReached: data.length >= action.chapters.meta.count,
         },
       };
 
@@ -120,10 +116,33 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         chapters: {
-          ...state.characters,
+          ...state.chapters,
           loading: !state.chapters.loading,
         },
       };
+
+    case CLEAN_SHOW_DATA:
+      console.log('limpiando')
+      let emptyData = {
+        error: false,
+        loading: false,
+      }
+      return {
+        ...state,
+        chapters:{
+          ...emptyData,
+          links:{},
+          data:[],
+        },
+        characters:{
+          ...emptyData,
+          links:{},
+          data:[],
+        },
+        show:{
+          ...emptyData
+        }
+      }
 
     default:
       return state;
