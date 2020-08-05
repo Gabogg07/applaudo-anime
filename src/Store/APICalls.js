@@ -49,7 +49,6 @@ export function fetchShowCharacters(showId, url) {
         return res;
       })
       .catch((error) => {
-        console.log('DISPATCH', error);
         dispatch(loadShowCharactersError(error));
       });
   };
@@ -69,7 +68,6 @@ export function fetchCharacterById(url, characterId){
         return res.data;
       })
       .catch((error) => {
-        console.log('DISPATCH', error);
         dispatch(loadSpecificCharacterError(characterId));
       });
   };

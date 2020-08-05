@@ -24,16 +24,16 @@ class CharacterCardList extends Component {
 
   onEndReached = () => {
     const {props, state} = this;
-    // if (
-    //   !props.characters.loading &&
-    //   props.characters.links.next &&
-    //   state.enabledLoadMore
-    // ) {
-    //   this.props.fetchShowCharacters(
-    //     props.showId,
-    //     this.fixUrl(props.characters.links.next),
-    //   );
-    // }
+    if (
+      !props.characters.loading &&
+      props.characters.links.next &&
+      state.enabledLoadMore
+    ) {
+      this.props.fetchShowCharacters(
+        props.showId,
+        this.fixUrl(props.characters.links.next),
+      );
+    }
   };
 
   fixUrl = (url) => {
