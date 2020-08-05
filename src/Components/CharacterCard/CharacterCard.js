@@ -58,12 +58,14 @@ const styles = StyleSheet.create({
   },
   showImage: {
     aspectRatio: 3 / 4,
+    borderRadius: 5,
   },
   titleContainer: {
-    backgroundColor: 'gray',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {},
+  title: {
+    color:'white',
+  },
 });
