@@ -15,6 +15,11 @@ import {
   LOAD_SPECIFIC_CHARACTER_SUCCESS,
   LOAD_SPECIFIC_CHARACTER_ERROR,
   LOADING_SPECIFIC_CHARACTER,
+  LOAD_SHOW_GENRES_SUCCESS,
+  LOAD_SHOW_GENRES_ERROR,
+  LOADING_SHOW_GENRES,
+  LOAD_SPECIFIC_GENRE_SUCCESS,
+  LOAD_SPECIFIC_GENRE_ERROR,
 } from './actionTypes';
 
 export const loadShowsSuccess = (shows, showType) => {
@@ -116,3 +121,39 @@ export const changeShowChaptersLoadingState = () => {
     type: LOADING_SHOW_CHAPTERS,
   };
 };
+
+
+
+export const loadShowGenresSuccess = (genres) => {
+  return {
+    type: LOAD_SHOW_GENRES_SUCCESS,
+    genres,
+  };
+};
+
+export const loadShowGenresError = () => {
+  return {
+    type: LOAD_SHOW_GENRES_ERROR,
+  };
+};
+
+export const changeShowGenresLoadingState = () => {
+  return {
+    type: LOADING_SHOW_GENRES,
+  };
+};
+
+export const loadSpecificGenreSucess = (genre, genreId) => {
+  return {
+    type: LOAD_SPECIFIC_GENRE_SUCCESS,
+    genre,
+    genreId,
+  }
+}
+
+export const loadSpecificGenreError = (genreId) => {
+  return {
+    type: LOAD_SPECIFIC_GENRE_ERROR,
+    genreId,
+  }
+}

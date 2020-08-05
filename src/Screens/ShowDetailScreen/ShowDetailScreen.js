@@ -12,9 +12,8 @@ import {fetchShowDetail} from '../../Store/APICalls';
 import {connect} from 'react-redux';
 import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
 import CharacterList from '../../Components/CharacterCardList/CharacterCardList';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import GenresList from '../../Components/GenresList/GenresList';
 import YoutubeButton from '../../Components/YoutubeButton/YoutubeButton';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const titlesList = [
   'Main Title',
@@ -41,7 +40,7 @@ class ShowDetail extends Component {
   renderTitleValuePair = (title, value) => (
     <View style={styles.titlesContainer} key={title}>
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.text}>{value}</Text>
+      {title === 'Genres' ? value : <Text style={styles.text}>{value}</Text>}
     </View>
   );
 
@@ -60,7 +59,6 @@ class ShowDetail extends Component {
       Year: `${this.formatDate(attributes.startDate)} till ${this.formatDate(
         attributes.endDate,
       )}`,
-      Genres: 'Lista generos',
       'Average Rating': attributes.averageRating,
       'Episode Duration': `${attributes.episodeLength} mins`,
       'Age Rating': attributes.ageRating,
@@ -113,7 +111,9 @@ class ShowDetail extends Component {
             </View>
           </View>
           <View style={styles.middleContainer}>
-            {this.renderTitleValuePair(titlesList[4], titles[titlesList[4]])}
+
+            <GenresList showId={show.id} />
+
             <View style={styles.gridContainer}>
               <View style={styles.gridItem}>
                 {this.renderTitleValuePair(
@@ -139,9 +139,9 @@ class ShowDetail extends Component {
           </View>
           {this.renderTitleValuePair(titlesList[9], titles[titlesList[9]])}
 
-          {(show.attributes.youtubeVideoId !== "") &&
-            <YoutubeButton youtubeId={show.attributes.youtubeVideoId}/>
-          } 
+          {show.attributes.youtubeVideoId !== '' && (
+            <YoutubeButton youtubeId={show.attributes.youtubeVideoId} />
+          )}
 
           {/** Episodes segment */}
           {show.attributes.episodeCount > 2 && (

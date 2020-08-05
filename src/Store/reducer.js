@@ -13,8 +13,10 @@ import {
   LOAD_SHOW_CHAPTERS_ERROR,
   LOADING_SHOW_CHAPTERS,
   LOAD_SPECIFIC_CHARACTER_SUCCESS,
-  LOAD_SPECIFIC_CHARACTER_ERROR,
-  LOADING_SPECIFIC_CHARACTER,
+  LOAD_SHOW_GENRES_SUCCESS,
+  LOAD_SHOW_GENRES_ERROR,
+  LOADING_SHOW_GENRES,
+  LOAD_SPECIFIC_GENRE_SUCCESS,
 } from './actionTypes';
 
 const initialState = {
@@ -34,6 +36,12 @@ const initialState = {
     list: [],
     data: {},
     links: {},
+  },
+  genres: {
+    error: false,
+    loading: false,
+    data: {},
+    list: [],
   },
 };
 
@@ -68,7 +76,6 @@ const reducer = (state = initialState, action) => {
       };
 
     case LOAD_SHOW_CHARACTERS_SUCCESS:
-      console.log(state.characters.list, action.characters.data);
       return {
         ...state,
         characters: {
@@ -140,6 +147,48 @@ const reducer = (state = initialState, action) => {
           },
         },
       };
+    
+    case LOAD_SHOW_GENRES_SUCCESS:
+      return{
+        ...state,
+        genres:{
+          ...state.genres,
+          loading:false,
+          list: action.genres
+        }
+      }
+
+    case LOAD_SHOW_GENRES_ERROR:
+      return {
+        ...state,
+        genres:{
+          ...state.genres,
+          error: true,
+          loading: false,
+        }
+      };
+
+    case LOADING_SHOW_GENRES:
+      return {
+        ...state,
+        genres: {
+          ...state.genres,
+          loading: !state.genres.loading,
+        },
+      };
+
+    case LOAD_SPECIFIC_GENRE_SUCCESS:
+      console.log(action.genre)
+      return {
+        ...state,
+        genres: {
+          ...state.genres,
+          data: {
+            ...state.genres.data,
+            [action.genreId]: action.genre,
+          },
+        },
+      };
 
     case CLEAN_SHOW_DATA:
       let emptyData = {
@@ -162,6 +211,12 @@ const reducer = (state = initialState, action) => {
         show: {
           ...emptyData,
         },
+        genres:{
+          ...emptyData,
+          links: {},
+          data: {},
+          list: [],
+        }
       };
 
     default:

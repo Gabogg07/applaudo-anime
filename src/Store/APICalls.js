@@ -13,6 +13,12 @@ import {
   loadSpecificCharacterSuccess,
   loadSpecificCharacterError,
   changeSpecificCharacterLoadingState,
+  changeShowGenresLoadingState,
+  loadShowGenresSuccess,
+  loadShowGenresError,
+  loadSpecificGenreSucess,
+  loadSpecificGenreError,
+
 } from '../Store/actions';
 
 export function fetchShowDetail(showId) {
@@ -56,7 +62,6 @@ export function fetchShowCharacters(showId, url) {
 
 export function fetchCharacterById(url, characterId){
   return (dispatch) => {
-    console.log(url);
     dispatch(changeSpecificCharacterLoadingState(characterId));
     fetch(url + '/character')
       .then((res) => res.json())
@@ -90,6 +95,44 @@ export function fetchShowChapter(showId, url) {
       })
       .catch((error) => {
         dispatch(loadShowChaptersError(error));
+      });
+  };
+}
+
+export function fetchShowGenres(showId) {
+  return (dispatch) => {
+    let url = `https://kitsu.io/api/edge/anime/${showId}/genres`;
+    dispatch(changeShowGenresLoadingState());
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        console.log(res.data)
+        dispatch(loadShowGenresSuccess(res.data));
+        return res.data;
+      })
+      .catch((error) => {
+        dispatch(loadShowGenresError(error));
+      });
+  };
+}
+
+export function fetchGenreById(url, genreId){
+  console.log(url)
+  return (dispatch) => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(loadSpecificGenreSucess(res, genreId));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(loadSpecificGenreError(genreId));
       });
   };
 }
