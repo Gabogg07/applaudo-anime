@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 class YoutubeButton extends Component {
@@ -10,25 +11,34 @@ class YoutubeButton extends Component {
   }
 
   render() {
+    const {navigation, youtubeId} = this.props;
     return (
       <TouchableWithoutFeedback
-        style={styles.buttonContainer}>
+        style={styles.buttonContainer}
+        onPress={() => {
+          navigation.navigate('YoutubeVideo', {youtubeId: youtubeId});
+        }}>
         <Text style={styles.title}>Watch</Text>
-        <Icon name="logo-youtube" size={30} color="#900" />
+        <Icon name="logo-youtube" size={30} />
       </TouchableWithoutFeedback>
     );
   }
 }
 
-export default YoutubeButton;
+export default function (props) {
+  const navigation = useNavigation();
+
+  return <YoutubeButton {...props} navigation={navigation} />;
+}
 
 const styles = StyleSheet.create({
   title: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+    marginHorizontal: 10,
   },
-  buttonContainer:{
+  buttonContainer: {
     marginVertical: 10,
     padding: 10,
     borderWidth: 2,
@@ -38,5 +48,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-  }
+  },
 });
