@@ -6,6 +6,12 @@ import {
   CLEAN_SHOW_DATA,
   LOADING_SHOWS,
   LOADING_SHOW_DATA,
+  LOAD_SHOW_CHARACTERS_SUCCESS, 
+  LOAD_SHOW_CHARACTERS_ERROR, 
+  LOADING_SHOW_CHARACTERS, 
+  LOAD_SHOW_CHAPTERS_SUCCESS, 
+  LOAD_SHOW_CHAPTERS_ERROR, 
+  LOADING_SHOW_CHAPTERS
 } from './actionTypes';
 
 const initialState = {
@@ -44,6 +50,34 @@ const reducer = (state = initialState, action) => {
           loading: !state.show.loading,
         },
       };
+
+    case LOAD_SHOW_CHARACTERS_SUCCESS:
+      return {
+        ...state,
+        characters:{
+          error:false,
+          loading:false,
+          ...action.characters
+        }
+      }
+
+    case LOAD_SHOW_CHARACTERS_ERROR:
+      return {
+        ...state,
+        chapters:{
+          error:true,
+          loading:false,
+        }
+      }
+
+      case LOADING_SHOW_CHARACTERS:
+        return {
+          ...state,
+          characters:{
+            ...state.characters,
+            loading: !state.characters.loading,
+          }
+        }
 
     default:
       return state;
