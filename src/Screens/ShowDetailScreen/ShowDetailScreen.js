@@ -139,9 +139,9 @@ class ShowDetail extends Component {
           </View>
           {this.renderTitleValuePair(titlesList[9], titles[titlesList[9]])}
 
-          {show.attributes.youtubeVideoId &&
+          {(show.attributes.youtubeVideoId !== "")&&
             <YoutubeButton youtubeId={show.attributes.youtubeVideoId}/>
-          }
+          } 
 
           {/** Episodes segment */}
           {show.attributes.episodeCount > 2 && (
