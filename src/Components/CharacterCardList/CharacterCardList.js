@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {View, FlatList, Dimensions, ActivityIndicator, Text} from 'react-native';
+import {
+  View,
+  FlatList,
+  Dimensions,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {fetchShowCharacters, fetchCharacterById} from '../../Store/APICalls';
 import {cleanShowData} from '../../Store/actions';
@@ -62,7 +68,8 @@ class CharacterCardList extends Component {
   }
 
   render() {
-    const {props, state} = this;
+    const {state, props} = this;
+    const {characters} = props;
 
     return (
       <View>
@@ -71,24 +78,19 @@ class CharacterCardList extends Component {
           showsHorizontalScrollIndicator={false}
           data={state.charactersList}
           renderItem={({item: data}) => {
-            return <CharacterCard styles={{width: width / 4}} data={this.props.characters.data[data.id]} getCharacter={()=>this.props.fetchCharacterById(data.links.self, data.id)}/>;
+            return (
+              <CharacterCard
+                styles={{width: width / 4}}
+                data={characters.data[data.id]}
+                getCharacter={() =>
+                  props.fetchCharacterById(data.links.self, data.id)
+                }
+              />
+            );
           }}
           ListEmptyComponent={() => {
             return (
-              <View
-                style={{justifyContent: 'center', alignSelf: 'center', width}}>
-                <ActivityIndicator size="large" color="white" />
-              </View>
-            );
-          }}
-          renderFooter={() => {
-            return (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                  width: 50,
-                }}>
+              <View style={styles.spinnerContainer}>
                 <ActivityIndicator size="large" color="white" />
               </View>
             );
@@ -105,9 +107,36 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchShowCharacters: (showId, url) => dispatch(fetchShowCharacters(showId, url)),
-  fetchCharacterById: (url, characterId) => dispatch(fetchCharacterById(url, characterId)),
+  fetchShowCharacters: (showId, url) =>
+    dispatch(fetchShowCharacters(showId, url)),
+  fetchCharacterById: (url, characterId) =>
+    dispatch(fetchCharacterById(url, characterId)),
   cleanShowData: () => dispatch(cleanShowData()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CharacterCardList);
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    margin: 5,
+    borderColor: 'black',
+    borderWidth: 2,
+  },
+  showImage: {
+    aspectRatio: 3 / 4,
+    borderRadius: 5,
+  },
+  titleContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    color: 'white',
+  },
+  spinnerContainer: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width,
+  },
+});

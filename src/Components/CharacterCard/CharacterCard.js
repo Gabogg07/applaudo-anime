@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -14,7 +15,7 @@ class CharacterCard extends Component {
     this.state = {};
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.getCharacter();
   }
 
@@ -22,12 +23,16 @@ class CharacterCard extends Component {
     const {props} = this;
     const {data, navigation} = props;
 
-    if(!props.data || props.data.loading){
-      return <View style={{color:'white', height:50, width:50, margin:5}}></View>
+    if (!props.data || props.data.loading) {
+      return (
+        <View style={[styles.cardContainer, styles.titleContainer]}>
+          <ActivityIndicator color="white" />
+        </View>
+      );
     }
     return (
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('ShowDetail', {showId: data.id})}>
+        onPress={() => navigation.navigate('ShowDetail', {showId: data.id, showType: data.type})}>
         <View style={styles.cardContainer}>
           <Image
             style={[styles.showImage, props.styles]}
@@ -66,6 +71,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    color:'white',
+    color: 'white',
   },
 });

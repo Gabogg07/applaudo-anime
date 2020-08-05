@@ -68,6 +68,10 @@ class ShowDetail extends Component {
   };
 
   listGenres = () => {
+    if (this.props.genres.error) {
+      return 'Error loading genres';
+    }
+
     let genresArray = this.props.genres.data.map(
       (genre) => genre.attributes.name,
     );

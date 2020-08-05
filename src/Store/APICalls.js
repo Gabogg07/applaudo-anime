@@ -107,7 +107,6 @@ export function fetchShowGenres(showId) {
         if (res.error) {
           throw res.error;
         }
-        console.log(res.data)
         dispatch(loadShowGenresSuccess(res.data));
         return res.data;
       })
