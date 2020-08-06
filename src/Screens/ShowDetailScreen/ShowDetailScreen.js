@@ -56,17 +56,18 @@ class ShowDetail extends Component {
 
   getTitleValuePairs = () => {
     const {attributes} = this.props.show;
+    let showDetailType = attributes.showType || attributes.serialization
+    let episodesCount = attributes.episodeCount || attributes.chapterCount
+    let episodeLength = attributes.episodeLength || 'Variant'
     return {
       'Main Title': attributes.titles.en || attributes.titles.en_jp,
       'Canonical Title': attributes.canonicalTitle,
-      Type: `${attributes.showType}, ${attributes.episodeCount} ${
-        attributes.episodeCount === 1 ? 'episode' : 'episodes'
-      }`,
+      Type: `${showDetailType}, ${episodesCount} ${episodesCount === 1 ? 'episode' : 'episodes'}`,
       Year: `${this.formatDate(attributes.startDate)} till ${this.formatDate(
         attributes.endDate,
       )}`,
       'Average Rating': attributes.averageRating,
-      'Episode Duration': `${attributes.episodeLength} mins`,
+      'Episode Duration': `${episodeLength} mins`,
       'Age Rating': attributes.ageRating,
       'Airing Status': attributes.status,
       Synopsis: attributes.synopsis,
@@ -109,6 +110,7 @@ class ShowDetail extends Component {
     }
 
     const titles = this.getTitleValuePairs();
+    const episodeCount = show.attributes.episodeCount || show.attributes.chapterCount
 
     return (
       <SafeAreaView style={styles.safeArea}>
@@ -161,7 +163,7 @@ class ShowDetail extends Component {
           )}
 
           {/** Episodes segment */}
-          {show.attributes.episodeCount > 2 && (
+          {episodeCount > 2 && (
             <View style={styles.chapterList}>
               <Text style={styles.title}>Episodes</Text>
               <ChapterCardList showId={this.props.show.id} showType={this.state.showType}/>
