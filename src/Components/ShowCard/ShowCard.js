@@ -17,6 +17,9 @@ class ShowCard extends Component {
   render() {
     const {props} = this;
     const {data, navigation} = props;
+    if(!data.attributes){
+      return <View style={{backgroundColor:'red', width:50, height:50}}></View>
+    }
     return (
       <TouchableWithoutFeedback
         onPress={() =>

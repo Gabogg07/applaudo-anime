@@ -5,11 +5,12 @@ import {
   Dimensions,
   ActivityIndicator,
   StyleSheet,
+  Text,
 } from 'react-native';
 import ShowCard from '../ShowCard/ShowCard';
 import {connect} from 'react-redux';
 import {showListType} from '../../constants';
-import {fetchShowsList} from '../../Store/APICalls';
+import {fetchShowsList, searchShow} from '../../Store/APICalls';
 const {width} = Dimensions.get('window');
 
 class ShowCardList extends Component {
@@ -25,7 +26,13 @@ class ShowCardList extends Component {
   }
 
   render() {
-    const showList = this.props.allShowsList[this.state.listType];
+    const {props} = this;
+    let showList;
+    if (!props.isSearchResult) {
+      showList = this.props.allShowsList[this.state.listType];
+    } else {
+      showList = this.props.searchResults[this.state.listType];
+    }
 
     return (
       <View>
@@ -34,6 +41,7 @@ class ShowCardList extends Component {
           showsHorizontalScrollIndicator={false}
           data={showList ? showList.data : []}
           renderItem={({item: show}) => {
+            if(props.isSearchResult) console.log(show)
             return <ShowCard styles={{width: width / 4}} data={show} />;
           }}
           ListEmptyComponent={() => {
@@ -53,10 +61,12 @@ class ShowCardList extends Component {
 
 const mapStateToProps = (state) => ({
   allShowsList: state.allShowsList,
+  searchResults: state.searchResults,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchShowsList: (showType) => dispatch(fetchShowsList(showType)),
+  searchShow: (query, showType) => dispatch(searchShow(query, showType)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowCardList);

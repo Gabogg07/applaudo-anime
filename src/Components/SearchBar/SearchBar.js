@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {View, Text, TextInput, TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {searchShow} from '../../Store/APICalls'
+import {searchShow} from '../../Store/APICalls';
 import {connect} from 'react-redux';
 import {showListType} from '../../constants';
-
+import {useNavigation} from '@react-navigation/native';
+import {cleanSearch} from '../../Store/actions'
 
 class SearchBar extends Component {
   constructor(props) {
@@ -28,11 +29,13 @@ class SearchBar extends Component {
   };
 
   onSubmit = ({nativeEvent: {text, eventCount, target}}) => {
+    this.props.cleanSearch();
     this.setState({
       searchValue: text,
     });
-    this.props.searchShow(text, showListType.ANIME)
-    this.props.searchShow(text, showListType.MANGA)
+    this.props.navigation.navigate('SearchResults');
+    this.props.searchShow(text, showListType.ANIME);
+    this.props.searchShow(text, showListType.MANGA);
   };
 
   render() {
@@ -61,13 +64,20 @@ class SearchBar extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => ({
   searchResult: state.searchResult,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   searchShow: (query, showType) => dispatch(searchShow(query, showType)),
+  cleanSearch: ()=> dispatch(cleanSearch())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(function (props) {
+  const navigation = useNavigation();
+
+  return <SearchBar {...props} navigation={navigation} />;
+});

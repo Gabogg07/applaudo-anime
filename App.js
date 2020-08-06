@@ -14,6 +14,7 @@ import store from './src/Store/configureStore';
 import HomeScreen from './src/Screens/HomeScreen/HomeScreen';
 import ShowDetailScreen from './src/Screens/ShowDetailScreen/ShowDetailScreen';
 import YoutubeVideoScreen from './src/Screens/YoutubeVideoScreen/YoutubeVideoScreen';
+import SearchResultsScreen from './src/Screens/SearchResultsScreen/SearchResultsScreen'
 import SearchBar from './src/Components/SearchBar/SearchBar';
 
 const Stack = createStackNavigator();
@@ -37,6 +38,11 @@ function App() {
             name="YoutubeVideo"
             component={YoutubeVideoScreen}
             options={{header: () => null}}
+          />
+          <Stack.Screen
+            name="SearchResults"
+            component={SearchResultsScreen}
+            options={{header: () => <SearchBar />}}
           />
         </Stack.Navigator>
       </NavigationContainer>

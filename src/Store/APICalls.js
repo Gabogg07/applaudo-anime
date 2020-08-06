@@ -179,6 +179,7 @@ export function searchShow(query, type) {
         return res;
       })
       .catch((error) => {
+        console.log('ERROR', error)
         dispatch(loadSearchError(type, error));
       });
   };

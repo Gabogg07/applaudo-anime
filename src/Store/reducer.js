@@ -19,6 +19,7 @@ import {
   LOAD_SEARCH_SUCCESS,
   LOAD_SEARCH_ERROR,
   LOADING_SEARCH,
+  CLEAN_SEARCH_DATA,
 } from './actionTypes';
 
 const initialState = {
@@ -47,7 +48,14 @@ const initialState = {
     data: [],
     list: [],
   },
-  searchResults:{}
+  searchResults: {
+    anime: {
+      data: [],
+    },
+    manga: {
+      data: [],
+    },
+  },
 };
 
 const reducer = (state = initialState, action) => {
@@ -216,11 +224,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         searchResults: {
+          ...state.searchResults,
           [action.showType]: {
             error: false,
             loading: false,
             data: [
-              state.searchResults[action.showType].data,
+              ...state.searchResults[action.showType].data,
               ...action.shows.data,
             ],
             links: action.shows.links,
@@ -232,6 +241,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         searchResults: {
+          ...state.searchResults,
           [action.showType]: {
             ...state.searchResults[action.showType],
             error: false,
@@ -241,17 +251,29 @@ const reducer = (state = initialState, action) => {
       };
 
     case LOADING_SEARCH:
-      console.log('SHOWTYPE',action.showType);
-      console.log(state.searchResults)
       let searchList = state.searchResults[action.showType];
       return {
         ...state,
         searchResults: {
+          ...state.searchResults,
           [action.showType]: {
             ...searchList,
             loading: state.searchResults[action.showType]
               ? !searchList.loading
               : true,
+          },
+        },
+      };
+
+    case CLEAN_SEARCH_DATA:
+      return {
+        ...state,
+        searchResults: {
+          anime: {
+            data: [],
+          },
+          manga: {
+            data: [],
           },
         },
       };
