@@ -20,18 +20,25 @@ import {
   LOADING_SHOW_GENRES,
 } from './actionTypes';
 
-export const loadShowsSuccess = (shows, showType) => {
+export const loadShowsSuccess = (shows, listType) => {
   return {
     type: LOAD_SHOWS_SUCESS,
     shows,
-    showType,
+    listType,
   };
 };
 
-export const loadShowsError = (showType) => {
+export const loadShowsError = (listType) => {
   return {
     type: LOAD_SHOWS_ERROR,
-    showType,
+    listType,
+  };
+};
+
+export const changeShowsLoadingState = (listType) => {
+  return {
+    type: LOADING_SHOWS,
+    listType,
   };
 };
 

@@ -1,10 +1,10 @@
 import {
   LOAD_SHOWS_SUCESS,
   LOAD_SHOWS_ERROR,
+  LOADING_SHOWS,
   LOAD_SHOW_DETAIL_SUCCESS,
   LOAD_SHOW_DETAIL_ERROR,
   CLEAN_SHOW_DATA,
-  LOADING_SHOWS,
   LOADING_SHOW_DATA,
   LOAD_SHOW_CHARACTERS_SUCCESS,
   LOAD_SHOW_CHARACTERS_ERROR,
@@ -19,9 +19,11 @@ import {
 } from './actionTypes';
 
 const initialState = {
-  show: {
-    error: false,
+  allShowsList: {},
+  show:{
+    error:false,
     loading: false,
+    data:[],
   },
   chapters: {
     error: false,
@@ -175,6 +177,33 @@ const reducer = (state = initialState, action) => {
           loading: !state.genres.loading,
         },
       };
+
+    case LOAD_SHOWS_SUCESS:
+      return {
+        ...state,
+        allShowsList: {
+          ...state.allShowsList,
+          [action.listType]: {
+            error: false,
+            loading: false,
+            data: [...state.allShowsList[action.listType].data, ...action.shows.data],
+            links: action.shows.links,
+          },
+        },
+      };
+    
+    case LOADING_SHOWS:
+      let selectedList = state.allShowsList[action.listType]
+      return {
+        ...state,
+        allShowsList:{
+          ...state.allShowsList,
+          [action.listType]:{
+            loading: true,
+            data: selectedList ? state.allShowsList[action.listType].data : [],
+          }
+        }
+      }
 
     case CLEAN_SHOW_DATA:
       let emptyData = {

@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import {loadShowsSuccess} from '../../Store/actions'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import ShowCardList from '../../Components/ShowCardList/ShowCardList';
+import {showListType} from '../../constants'
 
 class Home extends Component {
   constructor(props) {
@@ -13,16 +14,23 @@ class Home extends Component {
     };
   }
 
+  getTypeBasedTitles = (listType) => {
+    const modified = {
+      [showListType.TRENDING_ANIME]: 'Top 10 Trending Anime',
+      [showListType.TRENDING_MANGA]: 'Top 10 Trending Manga'
+    }
+
+    return modified[listType] || listType
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.safeArea}>
         <ScrollView
           style={styles.scrollView}>
-          <Text style={styles.title}> Anime </Text>
-          <ShowCardList />
-          <TouchableWithoutFeedback onPress={()=>{ this.props.loadShows()}}>
-            <Text style={styles.title}>redux test call</Text>
-          </TouchableWithoutFeedback>
+          <Text style={styles.title}>{this.getTypeBasedTitles(showListType.ANIME)} </Text>
+          <ShowCardList listType={showListType.TRENDING_MANGA}/>
+          
 
           {/* <Text> Anime </Text>
           <HorizontalList/>
@@ -67,6 +75,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+    textTransform:'capitalize'
   },
 
 });

@@ -19,7 +19,7 @@ class ChapterCardList extends Component {
 
   componentDidMount() {
     const {showId} = this.props;
-    this.props.fetchShowChapter(showId);
+    this.props.fetchShowChapter(showId, null, this.props.showType);
   }
 
   onEndReached = () => {
@@ -32,6 +32,7 @@ class ChapterCardList extends Component {
       this.props.fetchShowChapter(
         props.showId,
         this.fixUrl(props.chapters.links.next),
+        props.showType,
       );
     }
   };
@@ -105,7 +106,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchShowChapter: (showId, url) => dispatch(fetchShowChapter(showId, url)),
+  fetchShowChapter: (showId, url, showType) => dispatch(fetchShowChapter(showId, url, showType)),
   cleanShowData: () => dispatch(cleanShowData()),
 });
 

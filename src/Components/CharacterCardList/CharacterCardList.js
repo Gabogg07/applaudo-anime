@@ -24,8 +24,8 @@ class CharacterCardList extends Component {
   }
 
   componentDidMount() {
-    const {showId} = this.props;
-    this.props.fetchShowCharacters(showId);
+    const {showId, showType} = this.props;
+    this.props.fetchShowCharacters(showId, null, showType);
   }
 
   onEndReached = () => {
@@ -38,6 +38,7 @@ class CharacterCardList extends Component {
       this.props.fetchShowCharacters(
         props.showId,
         this.fixUrl(props.characters.links.next),
+        props.showType,
       );
     }
   };
@@ -107,8 +108,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchShowCharacters: (showId, url) =>
-    dispatch(fetchShowCharacters(showId, url)),
+  fetchShowCharacters: (showId, url, showType) =>
+    dispatch(fetchShowCharacters(showId, url, showType)),
   fetchCharacterById: (url, characterId) =>
     dispatch(fetchCharacterById(url, characterId)),
   cleanShowData: () => dispatch(cleanShowData()),

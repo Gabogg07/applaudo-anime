@@ -30,11 +30,15 @@ const titlesList = [
 class ShowDetail extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      showId: this.props.route.params.showId,
+      showType: this.props.route.params.showType
+    }
   }
 
   componentDidMount() {
-    this.props.fetchShowDetail(this.props.route.params.showId);
-    this.props.fetchShowGenres(this.props.route.params.showId);
+    this.props.fetchShowDetail(this.state.showId, this.state.showType);
+    this.props.fetchShowGenres(this.state.showId, this.state.showType);
   }
 
   renderTitleValuePair = (title, value) => (
@@ -45,6 +49,8 @@ class ShowDetail extends Component {
   );
 
   formatDate = (date) => {
+    console.log(date)
+    if(!date) return 'Today'
     return date.slice(8, 11) + '-' + date.slice(5, 7) + '-' + date.slice(0, 4);
   };
 
@@ -72,6 +78,7 @@ class ShowDetail extends Component {
       return 'Error loading genres';
     }
 
+    console.log('INTENTANDO CON ', this.props.genres.data)
     let genresArray = this.props.genres.data.map(
       (genre) => genre.attributes.name,
     );
@@ -157,14 +164,14 @@ class ShowDetail extends Component {
           {show.attributes.episodeCount > 2 && (
             <View style={styles.chapterList}>
               <Text style={styles.title}>Episodes</Text>
-              <ChapterCardList showId={this.props.show.id} />
+              <ChapterCardList showId={this.props.show.id} showType={this.state.showType}/>
             </View>
           )}
 
           {/** Characters segment */}
           <View style={styles.chapterList}>
             <Text style={styles.title}>Characters</Text>
-            <CharacterList showId={this.props.show.id} />
+            <CharacterList showId={this.props.show.id} showType={this.state.showType}/>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -178,8 +185,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchShowDetail: (showId) => dispatch(fetchShowDetail(showId)),
-  fetchShowGenres: (showId) => dispatch(fetchShowGenres(showId)),
+  fetchShowDetail: (showId, showType) => dispatch(fetchShowDetail(showId, showType)),
+  fetchShowGenres: (showId, showType) => dispatch(fetchShowGenres(showId, showType)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowDetail);
