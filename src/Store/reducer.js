@@ -16,6 +16,9 @@ import {
   LOAD_SHOW_GENRES_SUCCESS,
   LOAD_SHOW_GENRES_ERROR,
   LOADING_SHOW_GENRES,
+  LOAD_SEARCH_SUCCESS,
+  LOAD_SEARCH_ERROR,
+  LOADING_SEARCH,
 } from './actionTypes';
 
 const initialState = {
@@ -44,6 +47,7 @@ const initialState = {
     data: [],
     list: [],
   },
+  searchResults:{}
 };
 
 const reducer = (state = initialState, action) => {
@@ -204,6 +208,50 @@ const reducer = (state = initialState, action) => {
           [action.listType]: {
             loading: true,
             data: selectedList ? state.allShowsList[action.listType].data : [],
+          },
+        },
+      };
+
+    case LOAD_SEARCH_SUCCESS:
+      return {
+        ...state,
+        searchResults: {
+          [action.showType]: {
+            error: false,
+            loading: false,
+            data: [
+              state.searchResults[action.showType].data,
+              ...action.shows.data,
+            ],
+            links: action.shows.links,
+          },
+        },
+      };
+
+    case LOAD_SEARCH_ERROR:
+      return {
+        ...state,
+        searchResults: {
+          [action.showType]: {
+            ...state.searchResults[action.showType],
+            error: false,
+            loading: false,
+          },
+        },
+      };
+
+    case LOADING_SEARCH:
+      console.log('SHOWTYPE',action.showType);
+      console.log(state.searchResults)
+      let searchList = state.searchResults[action.showType];
+      return {
+        ...state,
+        searchResults: {
+          [action.showType]: {
+            ...searchList,
+            loading: state.searchResults[action.showType]
+              ? !searchList.loading
+              : true,
           },
         },
       };

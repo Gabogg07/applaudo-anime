@@ -13,7 +13,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import store from './src/Store/configureStore';
 import HomeScreen from './src/Screens/HomeScreen/HomeScreen';
 import ShowDetailScreen from './src/Screens/ShowDetailScreen/ShowDetailScreen';
-import YoutubeVideoScreen from './src/Screens/YoutubeVideoScreen/YoutubeVideoScreen'
+import YoutubeVideoScreen from './src/Screens/YoutubeVideoScreen/YoutubeVideoScreen';
+import SearchBar from './src/Components/SearchBar/SearchBar';
 
 const Stack = createStackNavigator();
 
@@ -22,7 +23,11 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{header: () => <SearchBar />}}
+          />
           <Stack.Screen
             name="ShowDetail"
             component={ShowDetailScreen}

@@ -18,6 +18,9 @@ import {
   LOAD_SHOW_GENRES_SUCCESS,
   LOAD_SHOW_GENRES_ERROR,
   LOADING_SHOW_GENRES,
+  LOAD_SEARCH_SUCCESS,
+  LOAD_SEARCH_ERROR,
+  LOADING_SEARCH,
 } from './actionTypes';
 
 export const loadShowsSuccess = (shows, listType) => {
@@ -143,5 +146,27 @@ export const loadShowGenresError = () => {
 export const changeShowGenresLoadingState = () => {
   return {
     type: LOADING_SHOW_GENRES,
+  };
+};
+
+export const loadSearchSuccess = (shows, showType) => {
+  return {
+    type: LOAD_SEARCH_SUCCESS,
+    shows,
+    showType,
+  };
+};
+
+export const loadSearchError = (showType) => {
+  return {
+    type: LOAD_SEARCH_ERROR,
+    showType,
+  };
+};
+
+export const changeSearchLoadingState = (showType) => {
+  return {
+    type: LOADING_SEARCH,
+    showType,
   };
 };

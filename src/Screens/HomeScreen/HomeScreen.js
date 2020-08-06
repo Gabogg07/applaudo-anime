@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, ScrollView, StyleSheet} from 'react-native';
+import {Text, ScrollView, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
 import {loadShowsSuccess} from '../../Store/actions';
@@ -25,25 +25,16 @@ class Home extends Component {
     return (
       <SafeAreaView style={styles.safeArea}>
         <ScrollView style={styles.scrollView}>
-          <Text style={styles.title}>
-            {this.getTypeBasedTitles(showListType.ANIME)}{' '}
-          </Text>
-          <ShowCardList listType={showListType.TRENDING_MANGA} />
-
-          {/* <Text> Anime </Text>
-          <HorizontalList/>
-
-          <Text> Anime </Text>
-          <HorizontalList/>
-
-          <Text> Anime </Text>
-          <HorizontalList/>
-
-          <Text> Anime </Text>
-          <HorizontalList/>
-
-          <Text> Anime </Text>
-          <HorizontalList/> */}
+          {Object.values(showListType).map((listType) => {
+            return (
+              <View>
+                <Text style={styles.title}>
+                  {this.getTypeBasedTitles(listType)}
+                </Text>
+                <ShowCardList listType={listType} />
+              </View>
+            );
+          })}
         </ScrollView>
       </SafeAreaView>
     );

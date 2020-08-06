@@ -17,6 +17,9 @@ import {
   changeShowGenresLoadingState,
   loadShowGenresSuccess,
   loadShowGenresError,
+  loadSearchSuccess,
+  loadSearchError,
+  changeSearchLoadingState,
 } from '../Store/actions';
 
 import {showListType} from '../constants';
@@ -155,6 +158,28 @@ export function fetchShowsList(type) {
       })
       .catch((error) => {
         dispatch(loadShowsError(type, error));
+      });
+  };
+}
+
+export function searchShow(query, type) {
+  return (dispatch) => {
+    let url = `https://kitsu.io/api/edge/${typeToUrl(type)}?filter[text]=${query}`;
+    console.log(url)
+    console.log(type)
+    dispatch(changeSearchLoadingState(type));
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        console.log(res)
+        dispatch(loadSearchSuccess(res, type));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(loadSearchError(type, error));
       });
   };
 }
