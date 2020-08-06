@@ -162,9 +162,9 @@ export function fetchShowsList(type) {
   };
 }
 
-export function searchShow(query, type) {
+export function searchShow(query, type, url) {
   return (dispatch) => {
-    let url = `https://kitsu.io/api/edge/${typeToUrl(type)}?filter[text]=${query}`;
+    if(!url) url = `https://kitsu.io/api/edge/${typeToUrl(type)}?filter[text]=${query}`;
     console.log(url)
     console.log(type)
     dispatch(changeSearchLoadingState(type));

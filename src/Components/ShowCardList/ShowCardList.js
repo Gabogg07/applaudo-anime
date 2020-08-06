@@ -10,6 +10,7 @@ import {
 import ShowCard from '../ShowCard/ShowCard';
 import {connect} from 'react-redux';
 import {showListType} from '../../constants';
+import {fixUrl} from '../../utilities'
 import {fetchShowsList, searchShow} from '../../Store/APICalls';
 const {width} = Dimensions.get('window');
 
@@ -22,8 +23,47 @@ class ShowCardList extends Component {
   }
 
   componentDidMount() {
-    if(!this.props.isSearchResult) this.props.fetchShowsList(this.state.listType);
+    if (!this.props.isSearchResult) {
+      this.props.fetchShowsList(this.state.listType);
+    }
   }
+
+  onSearchEndReached = () => {
+    const {props, state} = this;
+    let results = props.searchResults[state.listType];
+    console.log('RESULT', props.searchResults[state.listType])
+    if (!results.loading && results.links.next) {
+      console.log('PAGINADO')
+      this.props.searchShow(
+        props.searchResults.query,
+        state.listType,
+        fixUrl(results.links.next),
+      );
+    }
+  };
+
+  onDefaultEndReached = () => {
+    // const {props, state} = this;
+    // if (
+    //   !props.chapters.loading &&
+    //   props.chapters.links.next &&
+    // ) {
+    //   this.props.fetchShowChapter(
+    //     props.showId,
+    //     this.fixUrl(props.chapters.links.next),
+    //     props.showType,
+    //   );
+    // }
+  };
+
+  onEndReached = () => {
+    console.log('ENDREACHED', this.props.isSearchResult)
+    if (this.props.isSearchResult) {
+      this.onSearchEndReached();
+    } else {
+      this.onDefaultEndReached();
+    }
+  };
 
   render() {
     const {props} = this;
@@ -45,6 +85,13 @@ class ShowCardList extends Component {
             return <ShowCard styles={{width: width / 4}} data={show} />;
           }}
           ListEmptyComponent={() => {
+            if(showList && showList.error){
+              return (
+                <View>
+                  <Text> There was an problem loading the data</Text>
+                </View>
+              )
+            }
             return (
               <View style={[styles.outerSpinnerContainer, {width}]}>
                 <View style={styles.innerSpinnerContainer}>
@@ -55,12 +102,12 @@ class ShowCardList extends Component {
           }}
           renderFooter={() => {
             return (
-              <View
-                style={styles.innerSpinnerContainer}>
+              <View style={styles.innerSpinnerContainer}>
                 <ActivityIndicator size="large" color="white" />
               </View>
             );
           }}
+          onEndReached={this.onEndReached}
         />
       </View>
     );
@@ -74,7 +121,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchShowsList: (showType) => dispatch(fetchShowsList(showType)),
-  searchShow: (query, showType) => dispatch(searchShow(query, showType)),
+  searchShow: (query, showType, url) => dispatch(searchShow(query, showType, url)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowCardList);

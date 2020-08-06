@@ -24,12 +24,12 @@ class SearchResults extends Component {
               <ShowCardList listType={showListType.ANIME} isSearchResult/>
             </View>
 
-            <View style={styles.resultContainer}>
+            {/* <View style={styles.resultContainer}>
               <Text style={styles.title}>
                 {showListType.MANGA}
               </Text>
               <ShowCardList listType={showListType.MANGA} isSearchResult/>
-            </View>
+            </View> */}
 
         </ScrollView>
       </SafeAreaView>

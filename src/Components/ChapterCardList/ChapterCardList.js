@@ -4,6 +4,7 @@ import ChapterCard from '../ChapterCard/ChapterCard';
 import {connect} from 'react-redux';
 import {fetchShowChapter} from '../../Store/APICalls';
 import {cleanShowData} from '../../Store/actions';
+import {fixUrl} from '../../utilities'
 
 const {width} = Dimensions.get('screen');
 
@@ -31,17 +32,12 @@ class ChapterCardList extends Component {
     ) {
       this.props.fetchShowChapter(
         props.showId,
-        this.fixUrl(props.chapters.links.next),
+        fixUrl(props.chapters.links.next),
         props.showType,
       );
     }
   };
 
-  fixUrl = (url) => {
-    let url2 = url.split('%5D').join(']');
-    let url3 = url2.split('%5B').join('[');
-    return url3;
-  };
 
   componentWillUnmount() {
     this.props.cleanShowData();
