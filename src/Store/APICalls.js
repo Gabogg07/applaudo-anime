@@ -95,6 +95,10 @@ export function fetchShowChapter(showId, url, showType) {
   return (dispatch) => {
     if (!url) {
       url = `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}/episodes`;
+      console.log("ARME URL", url)
+    } else {
+      console.log('LLEGO URL', url)
+
     }
     dispatch(changeShowChaptersLoadingState());
     fetch(url)
@@ -115,6 +119,7 @@ export function fetchShowChapter(showId, url, showType) {
 export function fetchShowGenres(showId, showType) {
   return (dispatch) => {
     let url = `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}/genres`;
+    console.log('GENRES URL', url)
     dispatch(changeShowGenresLoadingState());
     fetch(url)
       .then((res) => res.json())

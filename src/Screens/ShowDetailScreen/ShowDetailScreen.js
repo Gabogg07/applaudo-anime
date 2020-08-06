@@ -57,15 +57,18 @@ class ShowDetail extends Component {
   getTitleValuePairs = () => {
     const {attributes} = this.props.show;
     let showDetailType = attributes.showType || attributes.serialization
-    let episodesCount = attributes.episodeCount || attributes.chapterCount
+    let episodesCount = attributes.episodeCount || attributes.chapterCount || 1
     let episodeLength = attributes.episodeLength || 'Variant'
+    let date = this.formatDate(attributes.startDate)
+    if(attributes.endDate) {
+      date = date + ' Till ' +this.formatDate(attributes.endDate)
+    }
+
     return {
       'Main Title': attributes.titles.en || attributes.titles.en_jp,
       'Canonical Title': attributes.canonicalTitle,
       Type: `${showDetailType}, ${episodesCount} ${episodesCount === 1 ? 'episode' : 'episodes'}`,
-      Year: `${this.formatDate(attributes.startDate)} till ${this.formatDate(
-        attributes.endDate,
-      )}`,
+      Year: `${date}`,
       'Average Rating': attributes.averageRating,
       'Episode Duration': `${episodeLength} mins`,
       'Age Rating': attributes.ageRating,
