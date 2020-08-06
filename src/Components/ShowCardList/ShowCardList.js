@@ -22,7 +22,7 @@ class ShowCardList extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchShowsList(this.state.listType);
+    if(!this.props.isSearchResult) this.props.fetchShowsList(this.state.listType);
   }
 
   render() {
@@ -41,7 +41,6 @@ class ShowCardList extends Component {
           showsHorizontalScrollIndicator={false}
           data={showList ? showList.data : []}
           renderItem={({item: show}) => {
-            if(props.isSearchResult) console.log(show)
             return <ShowCard styles={{width: width / 4}} data={show} />;
           }}
           ListEmptyComponent={() => {
@@ -50,6 +49,14 @@ class ShowCardList extends Component {
                 <View style={styles.innerSpinnerContainer}>
                   <ActivityIndicator size="large" color="white" />
                 </View>
+              </View>
+            );
+          }}
+          renderFooter={() => {
+            return (
+              <View
+                style={styles.innerSpinnerContainer}>
+                <ActivityIndicator size="large" color="white" />
               </View>
             );
           }}

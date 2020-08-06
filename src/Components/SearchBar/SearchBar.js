@@ -52,6 +52,8 @@ class SearchBar extends Component {
             onSubmitEditing={this.onSubmit}
             value={this.state.searchValue}
             placeholder="Search"
+            placeholderTextColor="white"
+            returnKeyType='search'
           />
         </View>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
