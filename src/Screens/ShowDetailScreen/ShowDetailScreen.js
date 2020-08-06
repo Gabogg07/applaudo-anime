@@ -49,7 +49,6 @@ class ShowDetail extends Component {
   );
 
   formatDate = (date) => {
-    console.log(date)
     if(!date) return 'Today'
     return date.slice(8, 11) + '-' + date.slice(5, 7) + '-' + date.slice(0, 4);
   };

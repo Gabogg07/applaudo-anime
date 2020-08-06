@@ -41,7 +41,7 @@ const initialState = {
   genres: {
     error: false,
     loading: false,
-    data: {},
+    data: [],
     list: [],
   },
 };

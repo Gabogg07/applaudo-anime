@@ -94,7 +94,9 @@ export function fetchCharacterById(url, characterId) {
 export function fetchShowChapter(showId, url, showType) {
   return (dispatch) => {
     if (!url) {
-      url = `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}/episodes`;
+      url = `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}`
+      if(showType===showListType.ANIME) url = url + '/episodes'
+      else url = url + '/chapters'
       console.log("ARME URL", url)
     } else {
       console.log('LLEGO URL', url)
@@ -139,6 +141,7 @@ export function fetchShowGenres(showId, showType) {
 //HomeScreen Api Calls
 export function fetchShowsList(type) {
   console.log('SHOWS URL', `https://kitsu.io/api/edge/${typeToUrl(type)}`)
+
   return (dispatch) => {
     let url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
     console.log(url)
