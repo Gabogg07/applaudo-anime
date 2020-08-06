@@ -19,6 +19,7 @@ import {
   LOAD_SEARCH_SUCCESS,
   LOAD_SEARCH_ERROR,
   LOADING_SEARCH,
+  FILL_SEARCH_QUERY,
   CLEAN_SEARCH_DATA,
 } from './actionTypes';
 
@@ -265,10 +266,20 @@ const reducer = (state = initialState, action) => {
         },
       };
 
+    case FILL_SEARCH_QUERY:
+      return {
+        ...state,
+        searchResults: {
+          ...state.searchResults,
+          query: action.query,
+        },
+      };
+
     case CLEAN_SEARCH_DATA:
       return {
         ...state,
         searchResults: {
+          query: '',
           anime: {
             data: [],
           },

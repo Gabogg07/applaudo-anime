@@ -36,6 +36,7 @@ class ShowCardList extends Component {
 
     return (
       <View>
+        <Text style={styles.title}>Query {this.props.searchResults.query}</Text>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -88,5 +89,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width / 4,
     aspectRatio: 3 / 4,
+  },
+  title: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'capitalize',
   },
 });

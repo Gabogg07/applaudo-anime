@@ -21,6 +21,7 @@ import {
   LOAD_SEARCH_SUCCESS,
   LOAD_SEARCH_ERROR,
   LOADING_SEARCH,
+  FILL_SEARCH_QUERY,
   CLEAN_SEARCH_DATA,
 } from './actionTypes';
 
@@ -151,7 +152,7 @@ export const changeShowGenresLoadingState = () => {
 };
 
 export const loadSearchSuccess = (shows, showType) => {
-  console.log('HOLA')
+  console.log('HOLA');
   return {
     type: LOAD_SEARCH_SUCCESS,
     shows,
@@ -175,6 +176,13 @@ export const changeSearchLoadingState = (showType) => {
 
 export const cleanSearch = () => {
   return {
-    type: CLEAN_SEARCH_DATA
-  }
-}
+    type: CLEAN_SEARCH_DATA,
+  };
+};
+
+export const fillSearchQuery = (query) => {
+  return {
+    type: FILL_SEARCH_QUERY,
+    query,
+  };
+};

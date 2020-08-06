@@ -6,7 +6,7 @@ import {searchShow} from '../../Store/APICalls';
 import {connect} from 'react-redux';
 import {showListType} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
-import {cleanSearch} from '../../Store/actions'
+import {cleanSearch, fillSearchQuery} from '../../Store/actions';
 
 class SearchBar extends Component {
   constructor(props) {
@@ -30,6 +30,7 @@ class SearchBar extends Component {
 
   onSubmit = ({nativeEvent: {text, eventCount, target}}) => {
     this.props.cleanSearch();
+    this.props.fillSearchQuery(text);
     this.setState({
       searchValue: text,
     });
@@ -53,7 +54,7 @@ class SearchBar extends Component {
             value={this.state.searchValue}
             placeholder="Search"
             placeholderTextColor="white"
-            returnKeyType='search'
+            returnKeyType="search"
           />
         </View>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -72,7 +73,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   searchShow: (query, showType) => dispatch(searchShow(query, showType)),
-  cleanSearch: ()=> dispatch(cleanSearch())
+  fillSearchQuery: (query) => dispatch(fillSearchQuery(query)),
+  cleanSearch: () => dispatch(cleanSearch()),
 });
 
 export default connect(
