@@ -81,6 +81,7 @@ class ShowCardList extends Component {
           horizontal
           showsHorizontalScrollIndicator={false}
           data={showList ? showList.data : []}
+          onEndReachedThreshold={1}
           renderItem={({item: show}) => {
             return <ShowCard styles={{width: width / 4}} data={show} />;
           }}
@@ -100,12 +101,16 @@ class ShowCardList extends Component {
               </View>
             );
           }}
-          renderFooter={() => {
-            return (
-              <View style={styles.innerSpinnerContainer}>
-                <ActivityIndicator size="large" color="white" />
-              </View>
-            );
+          ListFooterComponent={() => {
+            if(showList && showList.loading){
+              return (
+                <View style={styles.footerSpinnerContainer}>
+                  <ActivityIndicator size="large" color="white" />
+                </View>
+              );
+            }
+            return null
+
           }}
           onEndReached={this.onEndReached}
         />
@@ -136,6 +141,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width / 4,
     aspectRatio: 3 / 4,
+    marginVertical: 5
+  },
+  footerSpinnerContainer:{
+    justifyContent: 'center',
+    alignSelf: 'center',
+    height:'50%',
+    paddingHorizontal:10
   },
   title: {
     color: 'white',
