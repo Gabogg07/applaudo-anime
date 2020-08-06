@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
   View,
-  Text,
   FlatList,
   Dimensions,
   ActivityIndicator,
@@ -35,7 +34,7 @@ class ShowCardList extends Component {
           showsHorizontalScrollIndicator={false}
           data={showList ? showList.data : []}
           renderItem={({item: show}) => {
-            return <ShowCard styles={{width: width / 4}} data={show}/>;
+            return <ShowCard styles={{width: width / 4}} data={show} />;
           }}
           ListEmptyComponent={() => {
             return (

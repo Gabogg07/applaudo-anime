@@ -1,46 +1,44 @@
-import React, { Component } from 'react';
-import { View, Text, ScrollView, StyleSheet} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { connect } from 'react-redux'
-import {loadShowsSuccess} from '../../Store/actions'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import React, {Component} from 'react';
+import {Text, ScrollView, StyleSheet} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {connect} from 'react-redux';
+import {loadShowsSuccess} from '../../Store/actions';
 import ShowCardList from '../../Components/ShowCardList/ShowCardList';
-import {showListType} from '../../constants'
+import {showListType} from '../../constants';
 
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
 
   getTypeBasedTitles = (listType) => {
     const modified = {
       [showListType.TRENDING_ANIME]: 'Top 10 Trending Anime',
-      [showListType.TRENDING_MANGA]: 'Top 10 Trending Manga'
-    }
+      [showListType.TRENDING_MANGA]: 'Top 10 Trending Manga',
+    };
 
-    return modified[listType] || listType
-  }
+    return modified[listType] || listType;
+  };
 
   render() {
     return (
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView
-          style={styles.scrollView}>
-          <Text style={styles.title}>{this.getTypeBasedTitles(showListType.ANIME)} </Text>
-          <ShowCardList listType={showListType.TRENDING_MANGA}/>
-          
+        <ScrollView style={styles.scrollView}>
+          <Text style={styles.title}>
+            {this.getTypeBasedTitles(showListType.ANIME)}{' '}
+          </Text>
+          <ShowCardList listType={showListType.TRENDING_MANGA} />
 
           {/* <Text> Anime </Text>
           <HorizontalList/>
 
           <Text> Anime </Text>
           <HorizontalList/>
-          
+
           <Text> Anime </Text>
           <HorizontalList/>
-          
+
           <Text> Anime </Text>
           <HorizontalList/>
 
@@ -48,7 +46,6 @@ class Home extends Component {
           <HorizontalList/> */}
         </ScrollView>
       </SafeAreaView>
-
     );
   }
 }
@@ -66,7 +63,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: 'black',
-    flex:1,
+    flex: 1,
   },
   scrollView: {
     margin: 5,
@@ -75,7 +72,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-    textTransform:'capitalize'
+    textTransform: 'capitalize',
   },
-
 });

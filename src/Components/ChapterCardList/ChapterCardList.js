@@ -63,7 +63,7 @@ class ChapterCardList extends Component {
   }
 
   render() {
-    const {props, state} = this;
+    const {state} = this;
 
     return (
       <View>
@@ -106,7 +106,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchShowChapter: (showId, url, showType) => dispatch(fetchShowChapter(showId, url, showType)),
+  fetchShowChapter: (showId, url, showType) =>
+    dispatch(fetchShowChapter(showId, url, showType)),
   cleanShowData: () => dispatch(cleanShowData()),
 });
 

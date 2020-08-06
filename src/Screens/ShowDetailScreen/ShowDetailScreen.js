@@ -30,10 +30,10 @@ const titlesList = [
 class ShowDetail extends Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       showId: this.props.route.params.showId,
-      showType: this.props.route.params.showType
-    }
+      showType: this.props.route.params.showType,
+    };
   }
 
   componentDidMount() {
@@ -49,24 +49,28 @@ class ShowDetail extends Component {
   );
 
   formatDate = (date) => {
-    if(!date) return 'Today'
+    if (!date) {
+      return 'Today';
+    }
     return date.slice(8, 11) + '-' + date.slice(5, 7) + '-' + date.slice(0, 4);
   };
 
   getTitleValuePairs = () => {
     const {attributes} = this.props.show;
-    let showDetailType = attributes.showType || attributes.serialization
-    let episodesCount = attributes.episodeCount || attributes.chapterCount || 1
-    let episodeLength = attributes.episodeLength || 'Variant'
-    let date = this.formatDate(attributes.startDate)
-    if(attributes.endDate) {
-      date = date + ' Till ' +this.formatDate(attributes.endDate)
+    let showDetailType = attributes.showType || attributes.serialization;
+    let episodesCount = attributes.episodeCount || attributes.chapterCount || 1;
+    let episodeLength = attributes.episodeLength || 'Variant';
+    let date = this.formatDate(attributes.startDate);
+    if (attributes.endDate) {
+      date = date + ' Till ' + this.formatDate(attributes.endDate);
     }
 
     return {
       'Main Title': attributes.titles.en || attributes.titles.en_jp,
       'Canonical Title': attributes.canonicalTitle,
-      Type: `${showDetailType}, ${episodesCount} ${episodesCount === 1 ? 'episode' : 'episodes'}`,
+      Type: `${showDetailType}, ${episodesCount} ${
+        episodesCount === 1 ? 'episode' : 'episodes'
+      }`,
       Year: `${date}`,
       'Average Rating': attributes.averageRating,
       'Episode Duration': `${episodeLength} mins`,
@@ -81,7 +85,6 @@ class ShowDetail extends Component {
       return 'Error loading genres';
     }
 
-    console.log('INTENTANDO CON ', this.props.genres.data)
     let genresArray = this.props.genres.data.map(
       (genre) => genre.attributes.name,
     );
@@ -112,7 +115,8 @@ class ShowDetail extends Component {
     }
 
     const titles = this.getTitleValuePairs();
-    const episodeCount = show.attributes.episodeCount || show.attributes.chapterCount
+    const episodeCount =
+      show.attributes.episodeCount || show.attributes.chapterCount;
 
     return (
       <SafeAreaView style={styles.safeArea}>
@@ -168,14 +172,20 @@ class ShowDetail extends Component {
           {episodeCount > 2 && (
             <View style={styles.chapterList}>
               <Text style={styles.title}>Episodes</Text>
-              <ChapterCardList showId={this.props.show.id} showType={this.state.showType}/>
+              <ChapterCardList
+                showId={this.props.show.id}
+                showType={this.state.showType}
+              />
             </View>
           )}
 
           {/** Characters segment */}
           <View style={styles.chapterList}>
             <Text style={styles.title}>Characters</Text>
-            <CharacterList showId={this.props.show.id} showType={this.state.showType}/>
+            <CharacterList
+              showId={this.props.show.id}
+              showType={this.state.showType}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -189,8 +199,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchShowDetail: (showId, showType) => dispatch(fetchShowDetail(showId, showType)),
-  fetchShowGenres: (showId, showType) => dispatch(fetchShowGenres(showId, showType)),
+  fetchShowDetail: (showId, showType) =>
+    dispatch(fetchShowDetail(showId, showType)),
+  fetchShowGenres: (showId, showType) =>
+    dispatch(fetchShowGenres(showId, showType)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowDetail);

@@ -127,8 +127,6 @@ export const changeShowChaptersLoadingState = () => {
   };
 };
 
-
-
 export const loadShowGenresSuccess = (genres) => {
   return {
     type: LOAD_SHOW_GENRES_SUCCESS,

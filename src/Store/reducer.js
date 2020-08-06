@@ -20,10 +20,10 @@ import {
 
 const initialState = {
   allShowsList: {},
-  show:{
-    error:false,
+  show: {
+    error: false,
     loading: false,
-    data:[],
+    data: [],
   },
   chapters: {
     error: false,
@@ -186,24 +186,27 @@ const reducer = (state = initialState, action) => {
           [action.listType]: {
             error: false,
             loading: false,
-            data: [...state.allShowsList[action.listType].data, ...action.shows.data],
+            data: [
+              ...state.allShowsList[action.listType].data,
+              ...action.shows.data,
+            ],
             links: action.shows.links,
           },
         },
       };
-    
+
     case LOADING_SHOWS:
-      let selectedList = state.allShowsList[action.listType]
+      let selectedList = state.allShowsList[action.listType];
       return {
         ...state,
-        allShowsList:{
+        allShowsList: {
           ...state.allShowsList,
-          [action.listType]:{
+          [action.listType]: {
             loading: true,
             data: selectedList ? state.allShowsList[action.listType].data : [],
-          }
-        }
-      }
+          },
+        },
+      };
 
     case CLEAN_SHOW_DATA:
       let emptyData = {
