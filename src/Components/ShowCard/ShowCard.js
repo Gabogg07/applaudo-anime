@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import images from '../../Images/images';
 
 class ShowCard extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class ShowCard extends Component {
           <Image
             style={[styles.showImage, props.styles]}
             source={{uri: data.attributes.posterImage.medium}}
+            defaultSource={images.showPlaceHolder}
           />
           <View style={[props.styles, styles.titleContainer]}>
             <Text style={styles.title} numberOfLines={4}>

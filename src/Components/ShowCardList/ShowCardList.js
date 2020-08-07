@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     paddingHorizontal: 10,
+    height:'100%',
   },
   title: {
     color: 'white',
