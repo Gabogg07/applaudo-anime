@@ -5,11 +5,13 @@ import {
   Dimensions,
   ActivityIndicator,
   StyleSheet,
+  Text,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {fetchShowCharacters, fetchCharacterById} from '../../Store/APICalls';
 import {cleanShowData} from '../../Store/actions';
 import CharacterCard from '../CharacterCard/CharacterCard';
+import {fixUrl} from '../../utilities'
 
 const {width} = Dimensions.get('screen');
 
@@ -37,16 +39,10 @@ class CharacterCardList extends Component {
     ) {
       this.props.fetchShowCharacters(
         props.showId,
-        this.fixUrl(props.characters.links.next),
+        fixUrl(props.characters.links.next),
         props.showType,
       );
     }
-  };
-
-  fixUrl = (url) => {
-    let url2 = url.split('%5D').join(']');
-    let url3 = url2.split('%5B').join('[');
-    return url3;
   };
 
   componentWillUnmount() {
@@ -67,6 +63,37 @@ class CharacterCardList extends Component {
 
     return null;
   }
+
+  renderEmptyListComponent = (data) => {
+    if (!data || data.loading) {
+      return (
+        <View style={[styles.outerSpinnerContainer, {width}]}>
+          <View style={styles.innerSpinnerContainer}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        </View>
+      );
+    }
+    if (data && data.error) {
+      return (
+        <View style={styles.errorContainer}>
+          <Text style={styles.title}>
+            There was an problem loading the characters
+          </Text>
+        </View>
+      );
+    }
+
+    if (data && !data.loading) {
+      return (
+        <View style={styles.errorContainer}>
+          <Text style={styles.title}> No characters information found</Text>
+        </View>
+      );
+    }
+
+    return null;
+  };
 
   render() {
     const {state, props} = this;
@@ -89,13 +116,7 @@ class CharacterCardList extends Component {
               />
             );
           }}
-          ListEmptyComponent={() => {
-            return (
-              <View style={styles.spinnerContainer}>
-                <ActivityIndicator size="large" color="white" />
-              </View>
-            );
-          }}
+          ListEmptyComponent={()=>this.renderEmptyListComponent(characters)}
           onEndReached={this.onEndReached}
         />
       </View>
@@ -135,9 +156,20 @@ const styles = StyleSheet.create({
   title: {
     color: 'white',
   },
-  spinnerContainer: {
+  outerSpinnerContainer: {
     justifyContent: 'center',
     alignSelf: 'center',
-    width,
+  },
+  innerSpinnerContainer: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: width / 4,
+    aspectRatio: 3 / 4,
+  },
+  errorContainer: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginVertical: 10,
+    flex: 1,
   },
 });

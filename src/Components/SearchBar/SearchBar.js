@@ -1,5 +1,10 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  TextInput,
+  TouchableWithoutFeedback,
+  StyleSheet,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {searchShow} from '../../Store/APICalls';
@@ -41,14 +46,13 @@ class SearchBar extends Component {
 
   render() {
     return (
-      <SafeAreaView
-        style={{flexDirection: 'row', height: 70, backgroundColor: 'black'}}>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.iconContainer}>
           <Icon name="search-outline" size={28} color="white" />
         </View>
-        <View style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.textInputContainer}>
           <TextInput
-            style={{width: '100%', height: '100%', color: 'white'}}
+            style={styles.textInput}
             onChangeText={this.onChangeText}
             onSubmitEditing={this.onSubmit}
             value={this.state.searchValue}
@@ -57,7 +61,7 @@ class SearchBar extends Component {
             returnKeyType="search"
           />
         </View>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.iconContainer}>
           <TouchableWithoutFeedback onPress={this.onCancelSearch}>
             <Icon name="close-outline" size={28} color="white" />
           </TouchableWithoutFeedback>
@@ -84,4 +88,27 @@ export default connect(
   const navigation = useNavigation();
 
   return <SearchBar {...props} navigation={navigation} />;
+});
+
+const styles = StyleSheet.create({
+  safeAreaView: {
+    flexDirection: 'row',
+    height: 70,
+    backgroundColor: 'black',
+  },
+  iconContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textInputContainer: {
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textInput: {
+    width: '100%',
+    height: '100%',
+    color: 'white',
+  },
 });

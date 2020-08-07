@@ -4,7 +4,7 @@ import ChapterCard from '../ChapterCard/ChapterCard';
 import {connect} from 'react-redux';
 import {fetchShowChapter} from '../../Store/APICalls';
 import {cleanShowData} from '../../Store/actions';
-import {fixUrl} from '../../utilities'
+import {fixUrl} from '../../utilities';
 
 const {width} = Dimensions.get('screen');
 
@@ -37,7 +37,6 @@ class ChapterCardList extends Component {
       );
     }
   };
-
 
   componentWillUnmount() {
     this.props.cleanShowData();

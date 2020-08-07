@@ -60,7 +60,7 @@ class ShowDetail extends Component {
     const {attributes} = this.props.show;
     let showDetailType = attributes.showType || attributes.serialization;
     let episodesCount = attributes.episodeCount || attributes.chapterCount || 1;
-    let episodeLength = attributes.episodeLength || 'Variant';
+    let episodeLength = attributes.episodeLength || 'Unkown';
     let date = this.formatDate(attributes.startDate);
     if (attributes.endDate && attributes.endDate !== attributes.startDate) {
       date = date + ' Till ' + this.formatDate(attributes.endDate);

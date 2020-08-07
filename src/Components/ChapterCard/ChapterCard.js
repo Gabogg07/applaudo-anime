@@ -21,7 +21,7 @@ class ChapterCard extends Component {
     const {data, navigation} = props;
     return (
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('ShowDetail', {showId: data.id})}>
+        onPress={() => console.log('Insert chapter detail view if desired')}>
         <View style={styles.cardContainer}>
           <Image
             style={[styles.showImage, props.styles]}

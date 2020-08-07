@@ -32,7 +32,8 @@ class CharacterCard extends Component {
     }
     return (
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('ShowDetail', {showId: data.id, showType: data.type})}>
+        onPress={() => console.log('Insert character detail view if desired')}>
+        
         <View style={styles.cardContainer}>
           <Image
             style={[styles.showImage, props.styles]}
