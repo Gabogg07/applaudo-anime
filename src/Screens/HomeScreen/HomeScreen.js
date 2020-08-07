@@ -33,7 +33,7 @@ class Home extends Component {
         <ScrollView style={styles.scrollView}>
           {Object.values(showListType).map((listType) => {
             return (
-              <View>
+              <View key={listType}>
                 <Text style={styles.title}>
                   {this.getTypeBasedTitles(listType)}
                 </Text>
