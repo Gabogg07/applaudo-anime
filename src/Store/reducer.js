@@ -50,6 +50,7 @@ const initialState = {
     list: [],
   },
   searchResults: {
+    query:"",
     anime: {
       data: [],
     },

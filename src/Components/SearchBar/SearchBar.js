@@ -56,7 +56,7 @@ class SearchBar extends Component {
             onChangeText={this.onChangeText}
             onSubmitEditing={this.onSubmit}
             value={this.state.searchValue}
-            placeholder="Search"
+            placeholder={this.props.searchResults.query || "Search"}
             placeholderTextColor="white"
             returnKeyType="search"
           />
@@ -72,7 +72,7 @@ class SearchBar extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  searchResult: state.searchResult,
+  searchResults: state.searchResults,
 });
 
 const mapDispatchToProps = (dispatch) => ({

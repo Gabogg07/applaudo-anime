@@ -121,7 +121,9 @@ class ShowDetail extends Component {
 
     return (
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView style={styles.scrollView}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}>
           {/**  Upper segment for titles and show image*/}
           <View style={styles.upperContainer}>
             <Image
