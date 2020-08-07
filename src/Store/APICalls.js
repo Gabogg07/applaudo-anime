@@ -142,11 +142,13 @@ export function fetchShowGenres(showId, showType) {
   };
 }
 
-//HomeScreen Api Calls
+//HomeScreen API Calls
 export function fetchShowsList(type, url) {
   return (dispatch) => {
-    if(!url) url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
-    console.log(url)
+    if (!url) {
+      url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
+    }
+    console.log(url);
     dispatch(changeShowsLoadingState(type));
     fetch(url)
       .then((res) => res.json())
@@ -165,7 +167,11 @@ export function fetchShowsList(type, url) {
 
 export function searchShow(query, type, url) {
   return (dispatch) => {
-    if(!url) url = `https://kitsu.io/api/edge/${typeToUrl(type)}?filter[text]=${query}`;
+    if (!url) {
+      url = `https://kitsu.io/api/edge/${typeToUrl(
+        type,
+      )}?filter[text]=${query}`;
+    }
     dispatch(changeSearchLoadingState(type));
     fetch(url)
       .then((res) => res.json())

@@ -15,6 +15,10 @@ import {fixUrl} from '../../utilities'
 
 const {width} = Dimensions.get('screen');
 
+/**
+ * Component for horizontal listing character cards, it fetches the general list of characters and returns the id to each character card with the 
+ * function to fetch its own data
+ */
 class CharacterCardList extends Component {
   constructor(props) {
     super(props);

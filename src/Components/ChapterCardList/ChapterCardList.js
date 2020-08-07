@@ -8,6 +8,9 @@ import {fixUrl} from '../../utilities';
 
 const {width} = Dimensions.get('screen');
 
+/**
+ * Component for horizontal listing chapterCards taken from calling the chapters fetching api with the corresponding show id 
+ */
 class ChapterCardList extends Component {
   constructor(props) {
     super(props);

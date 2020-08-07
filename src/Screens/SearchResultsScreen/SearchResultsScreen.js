@@ -4,6 +4,9 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import ShowCardList from '../../Components/ShowCardList/ShowCardList';
 import {showListType} from '../../constants';
 
+/**
+ * Screen for showing search results for manga and anime types.
+ */
 class SearchResults extends Component {
   constructor(props) {
     super(props);

@@ -13,6 +13,9 @@ import {showListType} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {cleanSearch, fillSearchQuery} from '../../Store/actions';
 
+/**
+ * SearchBar component for anime and manga by receving input through textInput
+ */
 class SearchBar extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +59,7 @@ class SearchBar extends Component {
             onChangeText={this.onChangeText}
             onSubmitEditing={this.onSubmit}
             value={this.state.searchValue}
-            placeholder={this.props.searchResults.query || "Search"}
+            placeholder={this.props.searchResults.query || 'Search'}
             placeholderTextColor="white"
             returnKeyType="search"
           />

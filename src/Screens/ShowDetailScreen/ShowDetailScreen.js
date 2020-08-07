@@ -28,6 +28,9 @@ const titlesList = [
   'Synopsis',
 ];
 
+/**
+ * Screen for displaying the show detail information fetched by an API call with the corresponding showId
+ */
 class ShowDetail extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +45,11 @@ class ShowDetail extends Component {
     this.props.fetchShowGenres(this.state.showId, this.state.showType);
   }
 
+  /**
+   * Given a title and a value, returns a view with the first one as a bigger font text and the second one following with smaller fontSize
+   * @param {*} title
+   * @param {*} value
+   */
   renderTitleValuePair = (title, value) => (
     <View style={styles.titlesContainer} key={title}>
       <Text style={styles.title}>{title}</Text>
@@ -49,6 +57,10 @@ class ShowDetail extends Component {
     </View>
   );
 
+  /**
+   * Given a date string in the YYYY-MM-DD format, returns a string with a DD-MM-YYYY format
+   * @param {*} date
+   */
   formatDate = (date) => {
     if (!date) {
       return 'Today';
@@ -56,6 +68,9 @@ class ShowDetail extends Component {
     return date.slice(8, 11) + '-' + date.slice(5, 7) + '-' + date.slice(0, 4);
   };
 
+  /**
+   * Function used to process the show detail information and store each title with the desired value to be shown
+   */
   getTitleValuePairs = () => {
     const {attributes} = this.props.show;
     let showDetailType = attributes.showType || attributes.serialization;
@@ -65,7 +80,6 @@ class ShowDetail extends Component {
     if (attributes.endDate && attributes.endDate !== attributes.startDate) {
       date = date + ' Till ' + this.formatDate(attributes.endDate);
     }
-
     return {
       'Main Title': attributes.titles.en || attributes.titles.en_jp,
       'Canonical Title': attributes.canonicalTitle,
@@ -81,14 +95,15 @@ class ShowDetail extends Component {
     };
   };
 
-  listGenres = () => {
-    if (this.props.genres.error) {
+  /**
+   * Uses the genres object to check if there was any error and display it. If no error was found, the genres are displayed joined with a spacing
+   */
+  listGenres = (genres) => {
+    if (genres.error) {
       return 'Error loading genres';
     }
 
-    let genresArray = this.props.genres.data.map(
-      (genre) => genre.attributes.name,
-    );
+    let genresArray = genres.data.map((genre) => genre.attributes.name);
     return genresArray.join(' ');
   };
 
@@ -140,8 +155,11 @@ class ShowDetail extends Component {
             </View>
           </View>
           <View style={styles.middleContainer}>
-            {this.renderTitleValuePair(titlesList[4], this.listGenres())}
-
+            {/** Genre list display */}
+            {this.renderTitleValuePair(
+              titlesList[4],
+              this.listGenres(this.props.genres),
+            )}
             <View style={styles.gridContainer}>
               <View style={styles.gridItem}>
                 {this.renderTitleValuePair(

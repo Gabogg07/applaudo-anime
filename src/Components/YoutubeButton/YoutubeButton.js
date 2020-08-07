@@ -4,6 +4,9 @@ import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+/**
+ * Youtube button component, on press redirects to youtubeview screen with the given youtubeId
+ */
 class YoutubeButton extends Component {
   constructor(props) {
     super(props);

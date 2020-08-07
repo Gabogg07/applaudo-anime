@@ -27,10 +27,11 @@ react-native run-android # for running android
 
 
 ## Considerations
+- For general data management and fetch calls redux was used with the react-redux-toolkit configuration. For simplicity a single store was configured
 - Manga show details contain no episodes segment as the Kitsu API did not provide any information regarding each chapter (besides the id)
 - Shows with only one chapter wont show chapter segment either
 - Trying to stick to the given design, no back buttons on headers have been provided. To navigate back the native method must be used (Swipe back on iOS, back hardware button on Android)
-
+- No credits taken for the placeholder images or the app icon
 
 ## Author
 Gabriel Eduardo Gutierrez Garcia

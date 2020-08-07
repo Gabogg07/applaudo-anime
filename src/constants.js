@@ -1,9 +1,3 @@
-export const cardTypes = {
-  CHARACTER: 'CHARACTER',
-  CHAPTER: 'CHAPTER',
-  SHOW: 'SHOW',
-};
-
 export const showListType = {
   ANIME: 'anime',
   MANGA: 'manga',

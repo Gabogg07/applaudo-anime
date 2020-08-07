@@ -9,6 +9,9 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import images from '../../Images/images';
 
+/**
+ * Component for displaying the preview of a show, given the show information it display the thumbnail and title
+ */
 class ShowCard extends Component {
   constructor(props) {
     super(props);

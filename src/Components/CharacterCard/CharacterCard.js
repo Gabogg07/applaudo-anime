@@ -11,6 +11,9 @@ import {useNavigation} from '@react-navigation/native';
 import {randomCharacterPlaceHolder} from '../../utilities';
 import images from '../../Images/images'
 
+/**
+ * Component for displaying the preview of a character, given the character id and fetch information function
+ */
 class CharacterCard extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +22,6 @@ class CharacterCard extends Component {
 
   componentDidMount() {
     this.props.getCharacter();
-    console.log(randomCharacterPlaceHolder())
   }
 
   render() {

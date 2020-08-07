@@ -6,12 +6,18 @@ import {loadShowsSuccess} from '../../Store/actions';
 import ShowCardList from '../../Components/ShowCardList/ShowCardList';
 import {showListType} from '../../constants';
 
+/**
+ * Home screen for the applaudo app. Lists all the shows for each type of list inside the showListType constants
+ */
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
+  /**
+   * Given listype, modifies the text returned. If no text is to be modified, returns the original value
+   */
   getTypeBasedTitles = (listType) => {
     const modified = {
       [showListType.TRENDING_ANIME]: 'Top 10 Trending Anime',
@@ -25,7 +31,6 @@ class Home extends Component {
     return (
       <SafeAreaView style={styles.safeArea}>
         <ScrollView style={styles.scrollView}>
-          <Text>HOLA</Text>
           {Object.values(showListType).map((listType) => {
             return (
               <View>

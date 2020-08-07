@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {View, SafeAreaView, ActivityIndicator, StyleSheet} from 'react-native';
 import WebView from 'react-native-webview';
 
+/**
+ * Screen containing a webview for displaying the youtube video corresponding with the given props youtubeId
+ */
 class YoutubeVideoCard extends Component {
   constructor(props) {
     super(props);

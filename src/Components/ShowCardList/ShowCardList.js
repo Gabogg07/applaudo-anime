@@ -14,11 +14,15 @@ import {fixUrl} from '../../utilities';
 import {fetchShowsList, searchShow} from '../../Store/APICalls';
 const {width} = Dimensions.get('window');
 
+/**
+ * Component for horizontal listing showCards, it can be used to display search results using the isSearchResult props or to display list of shows
+ * by only giving the type of list (must be one of the listen on showListType)
+ */
 class ShowCardList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listType: props.listType || showListType.ANIME,
+      listType: props.listType || showListType.ANIME, //If no type provided, it defaults to anime
     };
   }
 
@@ -29,6 +33,9 @@ class ShowCardList extends Component {
     }
   }
 
+  /**
+   * EndReached function used for pagination on displaying search results
+   */
   onSearchEndReached = () => {
     const {props, state} = this;
     let results = props.searchResults[state.listType];
@@ -41,6 +48,9 @@ class ShowCardList extends Component {
     }
   };
 
+  /**
+   * EndReached function used for pagination on normal show list
+   */
   onDefaultEndReached = () => {
     const {props, state} = this;
     let results = props.allShowsList[state.listType];
@@ -49,6 +59,10 @@ class ShowCardList extends Component {
     }
   };
 
+
+  /**
+   * Wrapper function for endReached
+   */
   onEndReached = () => {
     if (this.props.isSearchResult) {
       this.onSearchEndReached();
