@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {randomCharacterPlaceHolder} from '../../utilities';
+import images from '../../Images/images'
 
 class CharacterCard extends Component {
   constructor(props) {
@@ -17,6 +19,7 @@ class CharacterCard extends Component {
 
   componentDidMount() {
     this.props.getCharacter();
+    console.log(randomCharacterPlaceHolder())
   }
 
   render() {
@@ -39,6 +42,7 @@ class CharacterCard extends Component {
             source={{
               uri: data.attributes.image && data.attributes.image.original,
             }}
+            defaultSource={images[randomCharacterPlaceHolder()]}
           />
           <View style={[props.styles, styles.titleContainer]}>
             <Text style={styles.title}>{data.attributes.canonicalName}</Text>
