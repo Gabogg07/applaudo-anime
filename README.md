@@ -20,9 +20,9 @@ react-native run-android # for running android
 ## External libraries used
 
 
-[React Navigation](https://reactnavigation.org/)
-[React Native Vector Icons](https://github.com/oblador/react-native-vector-icons)
-[React Native WebView](https://github.com/react-native-community/react-native-webview)
+[React Navigation](https://reactnavigation.org/),
+[React Native Vector Icons](https://github.com/oblador/react-native-vector-icons),
+[React Native WebView](https://github.com/react-native-community/react-native-webview),
 [React Redux](https://react-redux.js.org/)
 
 
