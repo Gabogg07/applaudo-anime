@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
 import CharacterList from '../../Components/CharacterCardList/CharacterCardList';
 import YoutubeButton from '../../Components/YoutubeButton/YoutubeButton';
+import {showListType} from '../../constants';
 
 const titlesList = [
   'Main Title',
@@ -61,7 +62,7 @@ class ShowDetail extends Component {
     let episodesCount = attributes.episodeCount || attributes.chapterCount || 1;
     let episodeLength = attributes.episodeLength || 'Variant';
     let date = this.formatDate(attributes.startDate);
-    if (attributes.endDate) {
+    if (attributes.endDate && attributes.endDate !== attributes.startDate) {
       date = date + ' Till ' + this.formatDate(attributes.endDate);
     }
 
@@ -72,7 +73,7 @@ class ShowDetail extends Component {
         episodesCount === 1 ? 'episode' : 'episodes'
       }`,
       Year: `${date}`,
-      'Average Rating': attributes.averageRating,
+      'Average Rating': attributes.averageRating || 'No rating found',
       'Episode Duration': `${episodeLength} mins`,
       'Age Rating': attributes.ageRating,
       'Airing Status': attributes.status,
@@ -169,7 +170,7 @@ class ShowDetail extends Component {
           )}
 
           {/** Episodes segment */}
-          {episodeCount > 2 && (
+          {episodeCount > 2 && this.state.showType === showListType.ANIME && (
             <View style={styles.chapterList}>
               <Text style={styles.title}>Episodes</Text>
               <ChapterCardList
