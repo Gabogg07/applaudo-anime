@@ -33,7 +33,6 @@ export default function (props) {
 
 const styles = StyleSheet.create({
   title: {
-    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
     marginHorizontal: 10,
