@@ -159,7 +159,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     paddingHorizontal: 10,
-    height:'100%',
+    width: width / 4,
+    aspectRatio: 3 / 4,
   },
   title: {
     color: 'white',
