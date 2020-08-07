@@ -148,7 +148,6 @@ export function fetchShowsList(type, url) {
     if (!url) {
       url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
     }
-    console.log(url);
     dispatch(changeShowsLoadingState(type));
     fetch(url)
       .then((res) => res.json())

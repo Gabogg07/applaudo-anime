@@ -152,7 +152,6 @@ export const changeShowGenresLoadingState = () => {
 };
 
 export const loadSearchSuccess = (shows, showType) => {
-  console.log('HOLA');
   return {
     type: LOAD_SEARCH_SUCCESS,
     shows,
