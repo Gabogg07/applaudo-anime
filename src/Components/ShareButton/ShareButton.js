@@ -31,7 +31,7 @@ class ShareButton extends Component {
         <Text style={styles.title}>Share</Text>
         <Icon
           name={
-            Platform.OS === 'android' ? 'share-social-outline' : 'share-outline'
+            Platform.OS === 'android' ? 'share-social' : 'share'
           }
           size={30}
         />
