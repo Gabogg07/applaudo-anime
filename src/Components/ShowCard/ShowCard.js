@@ -60,8 +60,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: 5,
   },
   title: {
     color: 'white',

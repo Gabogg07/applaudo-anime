@@ -33,7 +33,6 @@ class CharacterCard extends Component {
     return (
       <TouchableWithoutFeedback
         onPress={() => console.log('Insert character detail view if desired')}>
-        
         <View style={styles.cardContainer}>
           <Image
             style={[styles.showImage, props.styles]}
@@ -68,8 +67,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: 5,
   },
   title: {
     color: 'white',
