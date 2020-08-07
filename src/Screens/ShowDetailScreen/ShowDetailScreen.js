@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
 import CharacterList from '../../Components/CharacterCardList/CharacterCardList';
 import YoutubeButton from '../../Components/YoutubeButton/YoutubeButton';
+import ShareButton from '../../Components/ShareButton/ShareButton'
 import {showListType} from '../../constants';
 
 const titlesList = [
@@ -188,6 +189,7 @@ class ShowDetail extends Component {
           {show.attributes.youtubeVideoId !== '' && (
             <YoutubeButton youtubeId={show.attributes.youtubeVideoId} />
           )}
+            <ShareButton title={titles[titlesList[0]]} />
 
           {/** Episodes segment */}
           {episodeCount > 2 && this.state.showType === showListType.ANIME && (
