@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import images from '../../Images/images';
 
 class ChapterCard extends Component {
   constructor(props) {
@@ -29,6 +30,8 @@ class ChapterCard extends Component {
               uri:
                 data.attributes.thumbnail && data.attributes.thumbnail.original,
             }}
+            defaultSource={images.showPlaceHolder}
+
           />
           <View style={[props.styles, styles.titleContainer]}>
             <Text style={styles.title}>
