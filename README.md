@@ -1,13 +1,14 @@
 # Applaudo
 
 Anime and manga listing application with usage of [Kitsu API](https://kitsu.docs.apiary.io/) developed under React Native 0.63
+An Android APK is available in the repository files with Applaudo version for testing
 
 ## Installation
 This instructions consider that the node environment and react native requirements have been fulfilled 
 
 ```bash
 yarn install
-npx pod-install # Optional for iOS 
+npx pod-install # Only if running for iOS 
 ```
 
 ## Run
