@@ -143,9 +143,10 @@ export function fetchShowGenres(showId, showType) {
 }
 
 //HomeScreen Api Calls
-export function fetchShowsList(type) {
+export function fetchShowsList(type, url) {
   return (dispatch) => {
-    let url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
+    if(!url) url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
+    console.log(url)
     dispatch(changeShowsLoadingState(type));
     fetch(url)
       .then((res) => res.json())
@@ -165,8 +166,6 @@ export function fetchShowsList(type) {
 export function searchShow(query, type, url) {
   return (dispatch) => {
     if(!url) url = `https://kitsu.io/api/edge/${typeToUrl(type)}?filter[text]=${query}`;
-    console.log(url)
-    console.log(type)
     dispatch(changeSearchLoadingState(type));
     fetch(url)
       .then((res) => res.json())
@@ -174,12 +173,10 @@ export function searchShow(query, type, url) {
         if (res.error) {
           throw res.error;
         }
-        console.log(res)
         dispatch(loadSearchSuccess(res, type));
         return res;
       })
       .catch((error) => {
-        console.log('ERROR', error)
         dispatch(loadSearchError(type, error));
       });
   };

@@ -25,6 +25,7 @@ class Home extends Component {
     return (
       <SafeAreaView style={styles.safeArea}>
         <ScrollView style={styles.scrollView}>
+          <Text>HOLA</Text>
           {Object.values(showListType).map((listType) => {
             return (
               <View>

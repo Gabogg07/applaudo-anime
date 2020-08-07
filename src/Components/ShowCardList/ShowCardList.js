@@ -10,7 +10,7 @@ import {
 import ShowCard from '../ShowCard/ShowCard';
 import {connect} from 'react-redux';
 import {showListType} from '../../constants';
-import {fixUrl} from '../../utilities'
+import {fixUrl} from '../../utilities';
 import {fetchShowsList, searchShow} from '../../Store/APICalls';
 const {width} = Dimensions.get('window');
 
@@ -23,18 +23,17 @@ class ShowCardList extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.isSearchResult) {
-      this.props.fetchShowsList(this.state.listType);
+    const {state, props} = this;
+    if (!props.isSearchResult) {
+      props.fetchShowsList(state.listType);
     }
   }
 
   onSearchEndReached = () => {
     const {props, state} = this;
     let results = props.searchResults[state.listType];
-    console.log('RESULT', props.searchResults[state.listType])
     if (!results.loading && results.links.next) {
-      console.log('PAGINADO')
-      this.props.searchShow(
+      props.searchShow(
         props.searchResults.query,
         state.listType,
         fixUrl(results.links.next),
@@ -43,26 +42,56 @@ class ShowCardList extends Component {
   };
 
   onDefaultEndReached = () => {
-    // const {props, state} = this;
-    // if (
-    //   !props.chapters.loading &&
-    //   props.chapters.links.next &&
-    // ) {
-    //   this.props.fetchShowChapter(
-    //     props.showId,
-    //     this.fixUrl(props.chapters.links.next),
-    //     props.showType,
-    //   );
-    // }
+    const {props, state} = this;
+    let results = props.allShowsList[state.listType];
+    if (!results.loading && results.links.next) {
+      props.fetchShowsList(state.listType, fixUrl(results.links.next));
+    }
   };
 
   onEndReached = () => {
-    console.log('ENDREACHED', this.props.isSearchResult)
     if (this.props.isSearchResult) {
       this.onSearchEndReached();
     } else {
+      if (
+        this.state.listType === showListType.TRENDING_ANIME ||
+        this.state.listType === showListType.TRENDING_MANGA
+      ) {
+        return;
+      }
       this.onDefaultEndReached();
     }
+  };
+
+  renderEmptyListComponent = (showList) => {
+    if (!showList || (showList && showList.loading)) {
+      return (
+        <View style={[styles.outerSpinnerContainer, {width}]}>
+          <View style={styles.innerSpinnerContainer}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        </View>
+      );
+    }
+    if (showList && showList.error) {
+      return (
+        <View style={styles.errorContainer}>
+          <Text style={styles.title}>
+            There was an problem loading the data
+          </Text>
+        </View>
+      );
+    }
+
+    if (showList && !showList.loading) {
+      return (
+        <View style={styles.errorContainer}>
+          <Text style={styles.title}> No shows were found for your search</Text>
+        </View>
+      );
+    }
+
+    return null;
   };
 
   render() {
@@ -76,7 +105,6 @@ class ShowCardList extends Component {
 
     return (
       <View>
-        <Text style={styles.title}>Query {this.props.searchResults.query}</Text>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -85,32 +113,16 @@ class ShowCardList extends Component {
           renderItem={({item: show}) => {
             return <ShowCard styles={{width: width / 4}} data={show} />;
           }}
-          ListEmptyComponent={() => {
-            if(showList && showList.error){
-              return (
-                <View>
-                  <Text> There was an problem loading the data</Text>
-                </View>
-              )
-            }
-            return (
-              <View style={[styles.outerSpinnerContainer, {width}]}>
-                <View style={styles.innerSpinnerContainer}>
-                  <ActivityIndicator size="large" color="white" />
-                </View>
-              </View>
-            );
-          }}
+          ListEmptyComponent={() => this.renderEmptyListComponent(showList)}
           ListFooterComponent={() => {
-            if(showList && showList.loading){
+            if (showList && showList.loading && showList.data.length > 0) {
               return (
                 <View style={styles.footerSpinnerContainer}>
                   <ActivityIndicator size="large" color="white" />
                 </View>
               );
             }
-            return null
-
+            return null;
           }}
           onEndReached={this.onEndReached}
         />
@@ -125,8 +137,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchShowsList: (showType) => dispatch(fetchShowsList(showType)),
-  searchShow: (query, showType, url) => dispatch(searchShow(query, showType, url)),
+  fetchShowsList: (showType, url) => dispatch(fetchShowsList(showType, url)),
+  searchShow: (query, showType, url) =>
+    dispatch(searchShow(query, showType, url)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowCardList);
@@ -141,18 +154,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width / 4,
     aspectRatio: 3 / 4,
-    marginVertical: 5
   },
-  footerSpinnerContainer:{
+  footerSpinnerContainer: {
     justifyContent: 'center',
     alignSelf: 'center',
-    height:'50%',
-    paddingHorizontal:10
+    paddingHorizontal: 10,
   },
   title: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
     textTransform: 'capitalize',
+  },
+  errorContainer: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginVertical: 10,
+    flex: 1,
   },
 });

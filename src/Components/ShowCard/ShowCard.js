@@ -34,7 +34,7 @@ class ShowCard extends Component {
             source={{uri: data.attributes.posterImage.medium}}
           />
           <View style={[props.styles, styles.titleContainer]}>
-            <Text style={styles.title}>
+            <Text style={styles.title} numberOfLines={4}>
               {data.attributes.titles.en || data.attributes.titles.en_jp}
             </Text>
           </View>
