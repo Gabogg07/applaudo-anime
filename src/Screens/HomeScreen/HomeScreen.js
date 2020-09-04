@@ -19,14 +19,14 @@ function Home() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.scrollView}>
-        {Object.values(showListType).map((listType) => {
-          return (
-            <View key={listType}>
-              <Text style={styles.title}>{getTypeBasedTitles(listType)}</Text>
-              <ShowCardList listType={listType} />
+        {/* {Object.values(showListType).map((listType) => { */}
+          {/* return ( */}
+            <View key={'anime'}>
+              <Text style={styles.title}>{getTypeBasedTitles('anime')}</Text>
+              <ShowCardList listType={'anime'} />
             </View>
-          );
-        })}
+          {/* );
+        })} */}
       </ScrollView>
     </SafeAreaView>
   );

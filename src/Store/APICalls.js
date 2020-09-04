@@ -168,69 +168,35 @@ export function fetchShowGenres(showId, showType) {
 }
 
 //HomeScreen API Calls
-export function fetchShowsList(type, url) {
-  return (dispatch) => {
-    if (!url) {
-      url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
-    }
-    dispatch(changeShowsLoadingState(type));
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadShowsSuccess(res, type));
-        return res;
-      })
-      .catch((error) => {
-        dispatch(loadShowsError(type, error));
-      });
-  };
-}
-
-export function useFetchShowsList(type, url) {
-  const [context, dispatch] = useContext(ShowsContext);
+export async function fetchShowsList(type, url) {
   if (!url) {
     url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
   }
-  useEffect(() => {
-    dispatch(changeShowsLoadingState(type));
-    const fetchData = fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadShowsSuccess(res, type));
-        return res;
-      })
-      .catch((error) => {
-        dispatch(loadShowsError(type, error));
-      });
-    fetchData;
-  }, []);
+  try {
+    let res = await fetch(url);
+    let resJSON = await res.json();
+    if (resJSON.error) {
+      throw resJSON.error;
+    }
+    return {response: resJSON};
+  } catch (error) {
+    return {error};
+  }
 }
 
-export function searchShow(query, type, url) {
-  return (dispatch) => {
-    if (!url) {
-      url = `https://kitsu.io/api/edge/${typeToUrl(
-        type,
-      )}?filter[text]=${query}`;
+export async function searchShow(query, type, url) {
+  if (!url) {
+    url = `https://kitsu.io/api/edge/${typeToUrl(type)}?filter[text]=${query}`;
+  }
+  // dispatch(changeSearchLoadingState(type));
+  try {
+    let res = await fetch(url);
+    let resJSON = await res.json();
+    if (resJSON.error) {
+      throw resJSON.error;
     }
-    dispatch(changeSearchLoadingState(type));
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadSearchSuccess(res, type));
-        return res;
-      })
-      .catch((error) => {
-        dispatch(loadSearchError(type, error));
-      });
-  };
+    return {response: resJSON};
+  } catch (error) {
+    return {error};
+  }
 }
