@@ -38,7 +38,6 @@ function ShowCardList(props) {
     if (!props.isSearchResult) {
       dispatch(changeShowsLoadingState(listType));
       let {response, error} = await fetchShowsList(listType, url);
-      // console.log('VALOR RES', response)
       if (response) {
         dispatch(loadShowsSuccess(response, listType));
       } else {
@@ -91,7 +90,6 @@ function ShowCardList(props) {
    * Wrapper function for endReached
    */
   const onEndReached = () => {
-    console.log('endreached');
     if (props.isSearchResult) {
       onSearchEndReached();
     } else {
@@ -101,7 +99,6 @@ function ShowCardList(props) {
       ) {
         return;
       }
-      console.log('default');
       onDefaultEndReached();
     }
   };
