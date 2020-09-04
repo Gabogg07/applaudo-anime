@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,15 @@ import images from '../../Images/images'
 /**
  * Component for displaying the preview of a character, given the character id and fetch information function
  */
+
+// const CharacterCard = (props) => {
+
+//   useEffect(() => {
+    
+//   }, [])
+
+// }
+
 class CharacterCard extends Component {
   constructor(props) {
     super(props);

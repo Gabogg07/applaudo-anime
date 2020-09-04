@@ -1,3 +1,5 @@
+import React, {useState, useEffect, useContext} from 'react';
+
 import {
   loadShowsSuccess,
   loadShowsError,
@@ -23,6 +25,7 @@ import {
 } from '../Store/actions';
 
 import {showListType} from '../constants';
+import {ShowsContext} from './ShowProvider';
 
 function typeToUrl(type) {
   const query = {
@@ -52,6 +55,28 @@ export function fetchShowDetail(showId, showType) {
         dispatch(loadShowDetailError(error));
       });
   };
+}
+
+export function useFetchShowDetail(showId, showType) {
+  const [context, dispatch] = useContext(ShowsContext);
+  useEffect(() => {
+    dispatch(changeShowDetailLoadingState());
+    const fetchData = fetch(
+      `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}`,
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(loadShowDetailSuccess(res.data));
+        return res.data;
+      })
+      .catch((error) => {
+        dispatch(loadShowDetailError(error));
+      });
+    fetchData;
+  }, []);
 }
 
 export function fetchShowCharacters(showId, url, showType) {
@@ -162,6 +187,29 @@ export function fetchShowsList(type, url) {
         dispatch(loadShowsError(type, error));
       });
   };
+}
+
+export function useFetchShowsList(type, url) {
+  const [context, dispatch] = useContext(ShowsContext);
+  if (!url) {
+    url = `https://kitsu.io/api/edge/${typeToUrl(type)}`;
+  }
+  useEffect(() => {
+    dispatch(changeShowsLoadingState(type));
+    const fetchData = fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(loadShowsSuccess(res, type));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(loadShowsError(type, error));
+      });
+    fetchData;
+  }, []);
 }
 
 export function searchShow(query, type, url) {

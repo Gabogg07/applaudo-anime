@@ -26,6 +26,7 @@ import {
 } from './actionTypes';
 
 export const loadShowsSuccess = (shows, listType) => {
+  console.log('action creator')
   return {
     type: LOAD_SHOWS_SUCESS,
     shows,

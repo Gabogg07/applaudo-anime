@@ -23,44 +23,45 @@ import {
   CLEAN_SEARCH_DATA,
 } from './actionTypes';
 
-const initialState = {
-  allShowsList: {},
-  show: {
-    error: false,
-    loading: false,
-    data: [],
-  },
-  chapters: {
-    error: false,
-    loading: false,
-    data: [],
-    links: {},
-  },
-  characters: {
-    error: false,
-    loading: false,
-    list: [],
-    data: {},
-    links: {},
-  },
-  genres: {
-    error: false,
-    loading: false,
-    data: [],
-    list: [],
-  },
-  searchResults: {
-    query:"",
-    anime: {
-      data: [],
-    },
-    manga: {
-      data: [],
-    },
-  },
-};
+// const initialState = {
+//   allShowsList: {},
+//   show: {
+//     error: false,
+//     loading: false,
+//     data: [],
+//   },
+//   chapters: {
+//     error: false,
+//     loading: false,
+//     data: [],
+//     links: {},
+//   },
+//   characters: {
+//     error: false,
+//     loading: false,
+//     list: [],
+//     data: {},
+//     links: {},
+//   },
+//   genres: {
+//     error: false,
+//     loading: false,
+//     data: [],
+//     list: [],
+//   },
+//   searchResults: {
+//     query:"",
+//     anime: {
+//       data: [],
+//     },
+//     manga: {
+//       data: [],
+//     },
+//   },
+// };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state, action) => {
+  console.log('HOLA', action.type)
   switch (action.type) {
     case LOAD_SHOW_DETAIL_SUCCESS:
       return {
