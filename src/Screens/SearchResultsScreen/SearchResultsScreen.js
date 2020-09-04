@@ -7,30 +7,23 @@ import {showListType} from '../../constants';
 /**
  * Screen for showing search results for manga and anime types.
  */
-class SearchResults extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+function SearchResults(props){
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.title}> Search Results</Text>
+        <View style={styles.resultContainer}>
+          <Text style={styles.title}>{showListType.ANIME}</Text>
+          <ShowCardList listType={showListType.ANIME} isSearchResult />
+        </View>
 
-  render() {
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <ScrollView style={styles.scrollView}>
-          <Text style={styles.title}> Search Results</Text>
-          <View style={styles.resultContainer}>
-            <Text style={styles.title}>{showListType.ANIME}</Text>
-            <ShowCardList listType={showListType.ANIME} isSearchResult />
-          </View>
-
-          <View style={styles.resultContainer}>
-            <Text style={styles.title}>{showListType.MANGA}</Text>
-            <ShowCardList listType={showListType.MANGA} isSearchResult />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
+        <View style={styles.resultContainer}>
+          <Text style={styles.title}>{showListType.MANGA}</Text>
+          <ShowCardList listType={showListType.MANGA} isSearchResult />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 export default SearchResults;

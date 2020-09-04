@@ -188,7 +188,6 @@ export async function searchShow(query, type, url) {
   if (!url) {
     url = `https://kitsu.io/api/edge/${typeToUrl(type)}?filter[text]=${query}`;
   }
-  // dispatch(changeSearchLoadingState(type));
   try {
     let res = await fetch(url);
     let resJSON = await res.json();

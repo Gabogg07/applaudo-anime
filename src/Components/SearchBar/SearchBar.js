@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   TextInput,
@@ -8,90 +8,79 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {searchShow} from '../../Store/APICalls';
-import {connect} from 'react-redux';
 import {showListType} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
-import {cleanSearch, fillSearchQuery} from '../../Store/actions';
+import {
+  cleanSearch,
+  fillSearchQuery,
+  changeSearchLoadingState,
+  loadSearchSuccess,
+  loadSearchError,
+} from '../../Store/actions';
+import {ShowsContext} from '../../Store/ShowProvider';
 
 /**
  * SearchBar component for anime and manga by receving input through textInput
  */
-class SearchBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchValue: '',
-    };
+
+function SearchBar(props) {
+  const [context, dispatch] = useContext(ShowsContext);
+  const navigation = useNavigation();
+  const [searchValue, setSearchValue] = useState('');
+
+  const onChangeText = (text) => {
+    setSearchValue(text);
+  };
+
+  const onCancelSearch = (text) => {
+    setSearchValue('');
+  };
+
+  async function fetchSearch(text, showType) {
+    dispatch(changeSearchLoadingState(showType));
+    let {response, error} = await searchShow(text, showType);
+    if (response) {
+      dispatch(loadSearchSuccess(response, showType));
+    } else {
+      dispatch(loadSearchError(showType, error));
+    }
   }
 
-  onChangeText = (text) => {
-    this.setState({
-      searchValue: text,
-    });
+  const onSubmit = ({nativeEvent: {text, eventCount, target}}) => {
+    dispatch(cleanSearch());
+    dispatch(fillSearchQuery(text));
+    setSearchValue(text);
+    navigation.navigate('SearchResults');
+    fetchSearch(text, showListType.ANIME);
+    fetchSearch(text, showListType.MANGA);
   };
 
-  onCancelSearch = (text) => {
-    this.setState({
-      searchValue: '',
-    });
-  };
-
-  onSubmit = ({nativeEvent: {text, eventCount, target}}) => {
-    this.props.cleanSearch();
-    this.props.fillSearchQuery(text);
-    this.setState({
-      searchValue: text,
-    });
-    this.props.navigation.navigate('SearchResults');
-    this.props.searchShow(text, showListType.ANIME);
-    this.props.searchShow(text, showListType.MANGA);
-  };
-
-  render() {
-    return (
-      <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.iconContainer}>
-          <Icon name="search-outline" size={28} color="white" />
-        </View>
-        <View style={styles.textInputContainer}>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={this.onChangeText}
-            onSubmitEditing={this.onSubmit}
-            value={this.state.searchValue}
-            placeholder={this.props.searchResults.query || 'Search'}
-            placeholderTextColor="white"
-            returnKeyType="search"
-          />
-        </View>
-        <View style={styles.iconContainer}>
-          <TouchableWithoutFeedback onPress={this.onCancelSearch}>
-            <Icon name="close-outline" size={28} color="white" />
-          </TouchableWithoutFeedback>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  return (
+    <SafeAreaView style={styles.safeAreaView}>
+      <View style={styles.iconContainer}>
+        <Icon name="search-outline" size={28} color="white" />
+      </View>
+      <View style={styles.textInputContainer}>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={onChangeText}
+          onSubmitEditing={onSubmit}
+          value={searchValue}
+          placeholder={context.searchResults.query || 'Search'}
+          placeholderTextColor="white"
+          returnKeyType="search"
+        />
+      </View>
+      <View style={styles.iconContainer}>
+        <TouchableWithoutFeedback onPress={onCancelSearch}>
+          <Icon name="close-outline" size={28} color="white" />
+        </TouchableWithoutFeedback>
+      </View>
+    </SafeAreaView>
+  );
 }
 
-const mapStateToProps = (state) => ({
-  searchResults: state.searchResults,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  searchShow: (query, showType) => dispatch(searchShow(query, showType)),
-  fillSearchQuery: (query) => dispatch(fillSearchQuery(query)),
-  cleanSearch: () => dispatch(cleanSearch()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(function (props) {
-  const navigation = useNavigation();
-
-  return <SearchBar {...props} navigation={navigation} />;
-});
+export default SearchBar;
 
 const styles = StyleSheet.create({
   safeAreaView: {
