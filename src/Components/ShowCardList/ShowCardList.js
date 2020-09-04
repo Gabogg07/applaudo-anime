@@ -170,19 +170,6 @@ function ShowCardList(props) {
 
 export default ShowCardList;
 
-// const mapStateToProps = (state) => ({
-//   allShowsList: state.allShowsList,
-//   searchResults: state.searchResults,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   fetchShowsList: (showType, url) => dispatch(fetchShowsList(showType, url)),
-//   searchShow: (query, showType, url) =>
-//     dispatch(searchShow(query, showType, url)),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(ShowCardList);
-
 const styles = StyleSheet.create({
   outerSpinnerContainer: {
     justifyContent: 'center',
