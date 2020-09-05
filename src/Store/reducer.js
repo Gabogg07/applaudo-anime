@@ -61,7 +61,6 @@ import {
 // };
 
 const reducer = (state, action) => {
-  console.log('HOLA', action.type)
   switch (action.type) {
     case LOAD_SHOW_DETAIL_SUCCESS:
       return {

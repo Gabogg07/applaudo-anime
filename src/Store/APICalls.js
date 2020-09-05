@@ -85,30 +85,26 @@ export async function fetchCharacterById(url) {
   }
 }
 
-export function fetchShowChapter(showId, url, showType) {
-  return (dispatch) => {
-    if (!url) {
-      url = `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}`;
-      if (showType === showListType.ANIME) {
-        url = url + '/episodes';
-      } else {
-        url = url + '/chapters';
-      }
+export async function fetchShowChapter(showId, url, showType) {
+  if (!url) {
+    url = `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}`;
+    if (showType === showListType.ANIME) {
+      url = url + '/episodes';
+    } else {
+      url = url + '/chapters';
     }
-    dispatch(changeShowChaptersLoadingState());
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadShowChaptersSuccess(res));
-        return res;
-      })
-      .catch((error) => {
-        dispatch(loadShowChaptersError(error));
-      });
-  };
+  }
+
+  try {
+    let res = await fetch(url);
+    let resJSON = await res.json();
+    if (resJSON.error) {
+      throw resJSON.error;
+    }
+    return {response: resJSON};
+  } catch (error) {
+    return {error};
+  }
 }
 
 export async function fetchShowGenres(showId, showType) {

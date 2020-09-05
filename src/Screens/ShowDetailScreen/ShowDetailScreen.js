@@ -195,21 +195,18 @@ function ShowDetail(props) {
         </View>
         {renderTitleValuePair(titlesList[9], titles[titlesList[9]])}
 
-        {/* {show.attributes.youtubeVideoId !== '' && (
-            <YoutubeButton youtubeId={show.attributes.youtubeVideoId} />
-          )}
-            <ShareButton title={titles[titlesList[0]]} /> */}
+        {show.attributes.youtubeVideoId !== '' && (
+          <YoutubeButton youtubeId={show.attributes.youtubeVideoId} />
+        )}
+        <ShareButton title={titles[titlesList[0]]} />
 
-        {/* * Episodes segment
-          {episodeCount > 2 && this.state.showType === showListType.ANIME && (
-            <View style={styles.chapterList}>
-              <Text style={styles.title}>Episodes</Text>
-              <ChapterCardList
-                showId={this.props.show.id}
-                showType={this.state.showType}
-              />
-            </View>
-          )} */}
+        {/** Episodes segment */}
+        {episodeCount > 2 && showType === showListType.ANIME && (
+          <View style={styles.chapterList}>
+            <Text style={styles.title}>Episodes</Text>
+            <ChapterCardList showId={show.id} showType={showType} />
+          </View>
+        )}
 
         {/* * Characters segment */}
         <View style={styles.chapterList}>
