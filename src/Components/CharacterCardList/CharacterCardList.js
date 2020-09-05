@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   View,
   FlatList,
@@ -7,68 +7,68 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
-import {connect} from 'react-redux';
 import {fetchShowCharacters, fetchCharacterById} from '../../Store/APICalls';
-import {cleanShowData} from '../../Store/actions';
+import {
+  changeShowCharactersLoadingState,
+  loadShowCharactersSuccess,
+  loadShowCharactersError,
+  changeSpecificCharacterLoadingState,
+  loadSpecificCharacterSuccess,
+  loadSpecificCharacterError,
+} from '../../Store/actions';
 import CharacterCard from '../CharacterCard/CharacterCard';
-import {fixUrl} from '../../utilities'
+import {fixUrl} from '../../utilities';
+import {ShowsContext} from '../../Store/ShowProvider';
 
 const {width} = Dimensions.get('screen');
 
 /**
- * Component for horizontal listing character cards, it fetches the general list of characters and returns the id to each character card with the 
+ * Component for horizontal listing character cards, it fetches the general list of characters and returns the id to each character card with the
  * function to fetch its own data
  */
-class CharacterCardList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      charactersList: [],
-      listLength: 0,
-      enabledLoadMore: false,
-    };
+
+function CharacterCardList(props) {
+  const [context, dispatch] = useContext(ShowsContext);
+
+  async function fetchCharacters(showId, url, showType) {
+    dispatch(changeShowCharactersLoadingState());
+    let {response, error} = await fetchShowCharacters(showId, url, showType);
+    if (response) {
+      dispatch(loadShowCharactersSuccess(response, showType));
+    } else {
+      dispatch(loadShowCharactersError(error));
+    }
   }
 
-  componentDidMount() {
-    const {showId, showType} = this.props;
-    this.props.fetchShowCharacters(showId, null, showType);
+  async function fetchSpecificCharacter(url, characterId) {
+    dispatch(changeSpecificCharacterLoadingState());
+    let {response} = await fetchCharacterById(url);
+    if (response) {
+      dispatch(loadSpecificCharacterSuccess(response, characterId));
+    } else {
+      dispatch(loadSpecificCharacterError(characterId));
+    }
   }
 
-  onEndReached = () => {
-    const {props, state} = this;
-    if (
-      !props.characters.loading &&
-      props.characters.links.next &&
-      state.enabledLoadMore
-    ) {
-      this.props.fetchShowCharacters(
+  //DidMount
+  useEffect(() => {
+    const {showId, showType} = props;
+    fetchCharacters(showId, null, showType);
+  }, []);
+
+  const characters = context.characters;
+
+  const onEndReached = () => {
+    if (!characters.loading && characters.links.next) {
+      fetchCharacters(
         props.showId,
-        fixUrl(props.characters.links.next),
+        fixUrl(characters.links.next),
         props.showType,
       );
     }
   };
 
-  componentWillUnmount() {
-    this.props.cleanShowData();
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (
-      nextProps.characters.list &&
-      nextProps.characters.list.length !== prevState.listLength
-    ) {
-      return {
-        charactersList: nextProps.characters.list,
-        listLength: nextProps.characters.list.length,
-        enabledLoadMore: true,
-      };
-    }
-
-    return null;
-  }
-
-  renderEmptyListComponent = (data) => {
+  const renderEmptyListComponent = (data) => {
     if (!data || data.loading) {
       return (
         <View style={[styles.outerSpinnerContainer, {width}]}>
@@ -99,48 +99,31 @@ class CharacterCardList extends Component {
     return null;
   };
 
-  render() {
-    const {state, props} = this;
-    const {characters} = props;
-
-    return (
-      <View>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={state.charactersList}
-          renderItem={({item: data}) => {
-            return (
-              <CharacterCard
-                styles={{width: width / 4}}
-                data={characters.data[data.id]}
-                getCharacter={() =>
-                  props.fetchCharacterById(data.links.self, data.id)
-                }
-              />
-            );
-          }}
-          ListEmptyComponent={()=>this.renderEmptyListComponent(characters)}
-          onEndReached={this.onEndReached}
-        />
-      </View>
-    );
-  }
+  return (
+    <View>
+      <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={characters.list}
+        renderItem={({item: data}) => {
+          return (
+            <CharacterCard
+              styles={{width: width / 4}}
+              data={characters.data[data.id]}
+              getCharacter={() =>
+                fetchSpecificCharacter(data.links.self, data.id)
+              }
+            />
+          );
+        }}
+        ListEmptyComponent={() => renderEmptyListComponent(characters)}
+        onEndReached={onEndReached}
+      />
+    </View>
+  );
 }
 
-const mapStateToProps = (state) => ({
-  characters: state.characters,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  fetchShowCharacters: (showId, url, showType) =>
-    dispatch(fetchShowCharacters(showId, url, showType)),
-  fetchCharacterById: (url, characterId) =>
-    dispatch(fetchCharacterById(url, characterId)),
-  cleanShowData: () => dispatch(cleanShowData()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CharacterCardList);
+export default CharacterCardList;
 
 const styles = StyleSheet.create({
   cardContainer: {

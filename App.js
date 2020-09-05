@@ -32,12 +32,12 @@ function App() {
             component={HomeScreen}
             options={{header: () => <SearchBar />}}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="ShowDetail"
             component={ShowDetailScreen}
             options={{headerShown: false}}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="YoutubeVideo"
             component={YoutubeVideoScreen}
             options={{headerShown: false}}

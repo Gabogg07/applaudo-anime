@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,68 +7,51 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {randomCharacterPlaceHolder} from '../../utilities';
-import images from '../../Images/images'
+import images from '../../Images/images';
 
 /**
  * Component for displaying the preview of a character, given the character id and fetch information function
  */
 
-// const CharacterCard = (props) => {
+function CharacterCard(props) {
+  useEffect(() => {
+    props.getCharacter();
+  }, []);
 
-//   useEffect(() => {
-    
-//   }, [])
-
-// }
-
-class CharacterCard extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {
-    this.props.getCharacter();
-  }
-
-  render() {
-    const {props} = this;
-    const {data, navigation} = props;
-
-    if (!props.data || props.data.loading) {
-      return (
-        <View style={[styles.cardContainer, styles.titleContainer]}>
-          <ActivityIndicator color="white" />
-        </View>
-      );
-    }
+  const {data} = props;
+  if (!data || data.loading) {
     return (
-      <TouchableWithoutFeedback
-        onPress={() => console.log('Insert character detail view if desired')}>
-        <View style={styles.cardContainer}>
-          <Image
-            style={[styles.showImage, props.styles]}
-            source={{
-              uri: data.attributes.image && data.attributes.image.original,
-            }}
-            defaultSource={images[randomCharacterPlaceHolder()]}
-          />
-          <View style={[props.styles, styles.titleContainer]}>
-            <Text style={styles.title}>{data.attributes.canonicalName}</Text>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={[styles.cardContainer, styles.titleContainer]}>
+        <ActivityIndicator color="white" />
+      </View>
     );
   }
+  const characterData = data.data;
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => console.log('Insert character detail view if desired')}>
+      <View style={styles.cardContainer}>
+        <Image
+          style={[styles.showImage, props.styles]}
+          source={{
+            uri:
+              characterData.attributes.image &&
+              characterData.attributes.image.original,
+          }}
+          defaultSource={images[randomCharacterPlaceHolder()]}
+        />
+        <View style={[props.styles, styles.titleContainer]}>
+          <Text style={styles.title}>
+            {characterData.attributes.canonicalName}
+          </Text>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 }
 
-export default function (props) {
-  const navigation = useNavigation();
-
-  return <CharacterCard {...props} navigation={navigation} />;
-}
+export default CharacterCard;
 
 const styles = StyleSheet.create({
   cardContainer: {

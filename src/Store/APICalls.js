@@ -39,22 +39,19 @@ function typeToUrl(type) {
 }
 
 //Show Detail API Calls
-export function fetchShowDetail(showId, showType) {
-  return (dispatch) => {
-    dispatch(changeShowDetailLoadingState());
-    fetch(`https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadShowDetailSuccess(res.data));
-        return res.data;
-      })
-      .catch((error) => {
-        dispatch(loadShowDetailError(error));
-      });
-  };
+export async function fetchShowDetail(showId, showType) {
+  try {
+    let res = await fetch(
+      `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}`,
+    );
+    let resJSON = await res.json();
+    if (resJSON.error) {
+      throw resJSON.error;
+    }
+    return {response: resJSON};
+  } catch (error) {
+    return {error};
+  }
 }
 
 export function useFetchShowDetail(showId, showType) {
@@ -79,45 +76,35 @@ export function useFetchShowDetail(showId, showType) {
   }, []);
 }
 
-export function fetchShowCharacters(showId, url, showType) {
-  return (dispatch) => {
-    if (!url) {
-      url = `https://kitsu.io/api/edge/${typeToUrl(
-        showType,
-      )}/${showId}/characters`;
+export async function fetchShowCharacters(showId, url, showType) {
+  if (!url) {
+    url = `https://kitsu.io/api/edge/${typeToUrl(
+      showType,
+    )}/${showId}/characters`;
+  }
+  try {
+    let res = await fetch(url);
+    let resJSON = await res.json();
+    if (resJSON.error) {
+      throw resJSON.error;
     }
-    dispatch(changeShowCharactersLoadingState());
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadShowCharactersSuccess(res));
-        return res;
-      })
-      .catch((error) => {
-        dispatch(loadShowCharactersError(error));
-      });
-  };
+    return {response: resJSON};
+  } catch (error) {
+    return {error};
+  }
 }
 
-export function fetchCharacterById(url, characterId) {
-  return (dispatch) => {
-    dispatch(changeSpecificCharacterLoadingState(characterId));
-    fetch(url + '/character')
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadSpecificCharacterSuccess(res.data, characterId));
-        return res.data;
-      })
-      .catch((error) => {
-        dispatch(loadSpecificCharacterError(characterId));
-      });
-  };
+export async function fetchCharacterById(url) {
+  try {
+    let res = await fetch(url + '/character');
+    let resJSON = await res.json();
+    if (resJSON.error) {
+      throw resJSON.error;
+    }
+    return {response: resJSON};
+  } catch (error) {
+    return {error};
+  }
 }
 
 export function fetchShowChapter(showId, url, showType) {

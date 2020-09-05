@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -13,8 +13,15 @@ import {connect} from 'react-redux';
 import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
 import CharacterList from '../../Components/CharacterCardList/CharacterCardList';
 import YoutubeButton from '../../Components/YoutubeButton/YoutubeButton';
-import ShareButton from '../../Components/ShareButton/ShareButton'
+import ShareButton from '../../Components/ShareButton/ShareButton';
 import {showListType} from '../../constants';
+import {ShowsContext} from '../../Store/ShowProvider';
+import {
+  changeShowDetailLoadingState,
+  loadShowDetailSuccess,
+  loadShowDetailError,
+  cleanShowData,
+} from '../../Store/actions';
 
 const titlesList = [
   'Main Title',
@@ -32,26 +39,34 @@ const titlesList = [
 /**
  * Screen for displaying the show detail information fetched by an API call with the corresponding showId
  */
-class ShowDetail extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showId: this.props.route.params.showId,
-      showType: this.props.route.params.showType,
-    };
+function ShowDetail(props) {
+  const [context, dispatch] = useContext(ShowsContext);
+  const [showId, setShowId] = useState(props.route.params.showId);
+  const [showType, setShowType] = useState(props.route.params.showType);
+
+  async function fetchShow() {
+    dispatch(changeShowDetailLoadingState());
+    let {response, error} = await fetchShowDetail(showId, showType);
+    if (response) {
+      console.log(response)
+      dispatch(loadShowDetailSuccess(response));
+    } else {
+      dispatch(loadShowDetailError(error));
+    }
   }
 
-  componentDidMount() {
-    this.props.fetchShowDetail(this.state.showId, this.state.showType);
-    this.props.fetchShowGenres(this.state.showId, this.state.showType);
-  }
+  useEffect(() => {
+    dispatch(cleanShowData())
+    fetchShow();
+    // this.props.fetchShowGenres(this.state.showId, this.state.showType);
+  }, []);
 
   /**
    * Given a title and a value, returns a view with the first one as a bigger font text and the second one following with smaller fontSize
    * @param {*} title
    * @param {*} value
    */
-  renderTitleValuePair = (title, value) => (
+  const renderTitleValuePair = (title, value) => (
     <View style={styles.titlesContainer} key={title}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.text}>{value}</Text>
@@ -62,7 +77,7 @@ class ShowDetail extends Component {
    * Given a date string in the YYYY-MM-DD format, returns a string with a DD-MM-YYYY format
    * @param {*} date
    */
-  formatDate = (date) => {
+  const formatDate = (date) => {
     if (!date) {
       return 'Today';
     }
@@ -72,14 +87,14 @@ class ShowDetail extends Component {
   /**
    * Function used to process the show detail information and store each title with the desired value to be shown
    */
-  getTitleValuePairs = () => {
-    const {attributes} = this.props.show;
+  const getTitleValuePairs = () => {
+    const {attributes} = context.show.data;
     let showDetailType = attributes.showType || attributes.serialization;
     let episodesCount = attributes.episodeCount || attributes.chapterCount || 1;
     let episodeLength = attributes.episodeLength || 'Unkown';
-    let date = this.formatDate(attributes.startDate);
+    let date = formatDate(attributes.startDate);
     if (attributes.endDate && attributes.endDate !== attributes.startDate) {
-      date = date + ' Till ' + this.formatDate(attributes.endDate);
+      date = date + ' Till ' + formatDate(attributes.endDate);
     }
     return {
       'Main Title': attributes.titles.en || attributes.titles.en_jp,
@@ -99,7 +114,7 @@ class ShowDetail extends Component {
   /**
    * Uses the genres object to check if there was any error and display it. If no error was found, the genres are displayed joined with a spacing
    */
-  listGenres = (genres) => {
+  const listGenres = (genres) => {
     if (genres.error) {
       return 'Error loading genres';
     }
@@ -108,90 +123,76 @@ class ShowDetail extends Component {
     return genresArray.join(' ');
   };
 
-  render() {
-    const {show} = this.props;
-
-    if (show.loading || !show.id) {
-      return (
-        <View style={styles.messageView}>
-          <ActivityIndicator size="large" color="white" />
-          <Text style={styles.title}>Loading</Text>
-        </View>
-      );
-    }
-
-    if (show.error) {
-      return (
-        <View style={styles.messageView}>
-          <Text style={styles.title}>
-            Sorry there was an error loading the data
-          </Text>
-          <Text style={styles.title}>Please go back and reload</Text>
-        </View>
-      );
-    }
-
-    const titles = this.getTitleValuePairs();
-    const episodeCount =
-      show.attributes.episodeCount || show.attributes.chapterCount;
-
+  let {show} = context;
+  if (show.loading || !show.data || !show.data.id) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}>
-          {/**  Upper segment for titles and show image*/}
-          <View style={styles.upperContainer}>
-            <Image
-              style={styles.showImage}
-              source={{uri: show.attributes.posterImage.medium}}
-            />
-            <View style={styles.textHeaderContainer}>
-              {/** render first 4 titles that go beside the show image */}
-              {titlesList
-                .slice(0, 4)
-                .map((title) =>
-                  this.renderTitleValuePair(title, titles[title]),
-                )}
-            </View>
+      <View style={styles.messageView}>
+        <ActivityIndicator size="large" color="white" />
+        <Text style={styles.title}>Loading</Text>
+      </View>
+    );
+  }
+
+  if (show.error) {
+    return (
+      <View style={styles.messageView}>
+        <Text style={styles.title}>
+          Sorry there was an error loading the data
+        </Text>
+        <Text style={styles.title}>Please go back and reload</Text>
+      </View>
+    );
+  }
+
+  show = show.data;
+
+  const titles = getTitleValuePairs();
+  const episodeCount =
+    show.attributes.episodeCount || show.attributes.chapterCount;
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}>
+        {/**  Upper segment for titles and show image*/}
+        <View style={styles.upperContainer}>
+          <Image
+            style={styles.showImage}
+            source={{uri: show.attributes.posterImage.medium}}
+          />
+          <View style={styles.textHeaderContainer}>
+            {/** render first 4 titles that go beside the show image */}
+            {titlesList
+              .slice(0, 4)
+              .map((title) => renderTitleValuePair(title, titles[title]))}
           </View>
-          <View style={styles.middleContainer}>
-            {/** Genre list display */}
+        </View>
+        <View style={styles.middleContainer}>
+          {/* * Genre list display
             {this.renderTitleValuePair(
               titlesList[4],
               this.listGenres(this.props.genres),
-            )}
-            <View style={styles.gridContainer}>
-              <View style={styles.gridItem}>
-                {this.renderTitleValuePair(
-                  titlesList[5],
-                  titles[titlesList[5]],
-                )}
-                {this.renderTitleValuePair(
-                  titlesList[6],
-                  titles[titlesList[6]],
-                )}
-              </View>
-              <View style={styles.gridItem}>
-                {this.renderTitleValuePair(
-                  titlesList[7],
-                  titles[titlesList[7]],
-                )}
-                {this.renderTitleValuePair(
-                  titlesList[8],
-                  titles[titlesList[8]],
-                )}
-              </View>
+            )} */}
+          <View style={styles.gridContainer}>
+            <View style={styles.gridItem}>
+              {renderTitleValuePair(titlesList[5], titles[titlesList[5]])}
+              {renderTitleValuePair(titlesList[6], titles[titlesList[6]])}
+            </View>
+            <View style={styles.gridItem}>
+              {renderTitleValuePair(titlesList[7], titles[titlesList[7]])}
+              {renderTitleValuePair(titlesList[8], titles[titlesList[8]])}
             </View>
           </View>
-          {this.renderTitleValuePair(titlesList[9], titles[titlesList[9]])}
+        </View>
+        {renderTitleValuePair(titlesList[9], titles[titlesList[9]])}
 
-          {show.attributes.youtubeVideoId !== '' && (
+        {/* {show.attributes.youtubeVideoId !== '' && (
             <YoutubeButton youtubeId={show.attributes.youtubeVideoId} />
           )}
-            <ShareButton title={titles[titlesList[0]]} />
+            <ShareButton title={titles[titlesList[0]]} /> */}
 
-          {/** Episodes segment */}
+        {/* * Episodes segment
           {episodeCount > 2 && this.state.showType === showListType.ANIME && (
             <View style={styles.chapterList}>
               <Text style={styles.title}>Episodes</Text>
@@ -200,35 +201,33 @@ class ShowDetail extends Component {
                 showType={this.state.showType}
               />
             </View>
-          )}
+          )} */}
 
-          {/** Characters segment */}
-          <View style={styles.chapterList}>
-            <Text style={styles.title}>Characters</Text>
-            <CharacterList
-              showId={this.props.show.id}
-              showType={this.state.showType}
-            />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
+        {/* * Characters segment */}
+        <View style={styles.chapterList}>
+          <Text style={styles.title}>Characters</Text>
+          <CharacterList showId={show.id} showType={showType} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
-const mapStateToProps = (state) => ({
-  show: state.show,
-  genres: state.genres,
-});
+export default ShowDetail;
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchShowDetail: (showId, showType) =>
-    dispatch(fetchShowDetail(showId, showType)),
-  fetchShowGenres: (showId, showType) =>
-    dispatch(fetchShowGenres(showId, showType)),
-});
+// const mapStateToProps = (state) => ({
+//   show: state.show,
+//   genres: state.genres,
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShowDetail);
+// const mapDispatchToProps = (dispatch) => ({
+//   fetchShowDetail: (showId, showType) =>
+//     dispatch(fetchShowDetail(showId, showType)),
+//   fetchShowGenres: (showId, showType) =>
+//     dispatch(fetchShowGenres(showId, showType)),
+// });
+
+// export default connect(mapStateToProps, mapDispatchToProps)(ShowDetail);
 
 const styles = StyleSheet.create({
   messageView: {

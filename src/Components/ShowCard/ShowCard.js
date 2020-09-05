@@ -18,11 +18,12 @@ function ShowCard(props) {
 
   return (
     <TouchableWithoutFeedback
-      onPress={() =>
+      onPress={() =>{
+        console.log('HOLAAAA')
         navigation.navigate('ShowDetail', {
           showId: data.id,
           showType: data.type,
-        })
+        })}
       }>
       <View style={styles.cardContainer}>
         <Image
