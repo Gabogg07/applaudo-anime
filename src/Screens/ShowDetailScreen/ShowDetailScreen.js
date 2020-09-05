@@ -220,20 +220,6 @@ function ShowDetail(props) {
 
 export default ShowDetail;
 
-// const mapStateToProps = (state) => ({
-//   show: state.show,
-//   genres: state.genres,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   fetchShowDetail: (showId, showType) =>
-//     dispatch(fetchShowDetail(showId, showType)),
-//   fetchShowGenres: (showId, showType) =>
-//     dispatch(fetchShowGenres(showId, showType)),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(ShowDetail);
-
 const styles = StyleSheet.create({
   messageView: {
     backgroundColor: 'black',
