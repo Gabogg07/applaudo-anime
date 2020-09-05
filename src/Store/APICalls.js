@@ -54,28 +54,6 @@ export async function fetchShowDetail(showId, showType) {
   }
 }
 
-export function useFetchShowDetail(showId, showType) {
-  const [context, dispatch] = useContext(ShowsContext);
-  useEffect(() => {
-    dispatch(changeShowDetailLoadingState());
-    const fetchData = fetch(
-      `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}`,
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadShowDetailSuccess(res.data));
-        return res.data;
-      })
-      .catch((error) => {
-        dispatch(loadShowDetailError(error));
-      });
-    fetchData;
-  }, []);
-}
-
 export async function fetchShowCharacters(showId, url, showType) {
   if (!url) {
     url = `https://kitsu.io/api/edge/${typeToUrl(
@@ -133,25 +111,18 @@ export function fetchShowChapter(showId, url, showType) {
   };
 }
 
-export function fetchShowGenres(showId, showType) {
-  return (dispatch) => {
-    let url = `https://kitsu.io/api/edge/${typeToUrl(
-      showType,
-    )}/${showId}/genres`;
-    dispatch(changeShowGenresLoadingState());
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(loadShowGenresSuccess(res.data));
-        return res.data;
-      })
-      .catch((error) => {
-        dispatch(loadShowGenresError(error));
-      });
-  };
+export async function fetchShowGenres(showId, showType) {
+  let url = `https://kitsu.io/api/edge/${typeToUrl(showType)}/${showId}/genres`;
+  try {
+    let res = await fetch(url);
+    let resJSON = await res.json();
+    if (resJSON.error) {
+      throw resJSON.error;
+    }
+    return {response: resJSON.data};
+  } catch (error) {
+    return {error};
+  }
 }
 
 //HomeScreen API Calls

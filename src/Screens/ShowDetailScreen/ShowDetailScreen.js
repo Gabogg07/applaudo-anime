@@ -9,7 +9,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {fetchShowDetail, fetchShowGenres} from '../../Store/APICalls';
-import {connect} from 'react-redux';
 import ChapterCardList from '../../Components/ChapterCardList/ChapterCardList';
 import CharacterList from '../../Components/CharacterCardList/CharacterCardList';
 import YoutubeButton from '../../Components/YoutubeButton/YoutubeButton';
@@ -21,6 +20,9 @@ import {
   loadShowDetailSuccess,
   loadShowDetailError,
   cleanShowData,
+  changeShowGenresLoadingState,
+  loadShowGenresSuccess,
+  loadShowGenresError,
 } from '../../Store/actions';
 
 const titlesList = [
@@ -48,17 +50,28 @@ function ShowDetail(props) {
     dispatch(changeShowDetailLoadingState());
     let {response, error} = await fetchShowDetail(showId, showType);
     if (response) {
-      console.log(response)
+      console.log(response);
       dispatch(loadShowDetailSuccess(response));
     } else {
       dispatch(loadShowDetailError(error));
     }
   }
 
+  async function fetchGenres() {
+    dispatch(changeShowGenresLoadingState());
+    let {response, error} = await fetchShowGenres(showId, showType);
+    if (response) {
+      console.log(response);
+      dispatch(loadShowGenresSuccess(response));
+    } else {
+      dispatch(loadShowGenresError(error));
+    }
+  }
+
   useEffect(() => {
-    dispatch(cleanShowData())
+    dispatch(cleanShowData());
     fetchShow();
-    // this.props.fetchShowGenres(this.state.showId, this.state.showType);
+    fetchGenres();
   }, []);
 
   /**
@@ -149,7 +162,7 @@ function ShowDetail(props) {
   const titles = getTitleValuePairs();
   const episodeCount =
     show.attributes.episodeCount || show.attributes.chapterCount;
-
+  const {genres} = context;
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
@@ -169,11 +182,8 @@ function ShowDetail(props) {
           </View>
         </View>
         <View style={styles.middleContainer}>
-          {/* * Genre list display
-            {this.renderTitleValuePair(
-              titlesList[4],
-              this.listGenres(this.props.genres),
-            )} */}
+          {/* * Genre list display */}
+          {renderTitleValuePair(titlesList[4], listGenres(genres))}
           <View style={styles.gridContainer}>
             <View style={styles.gridItem}>
               {renderTitleValuePair(titlesList[5], titles[titlesList[5]])}
