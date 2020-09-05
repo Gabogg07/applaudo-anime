@@ -50,7 +50,6 @@ function ShowDetail(props) {
     dispatch(changeShowDetailLoadingState());
     let {response, error} = await fetchShowDetail(showId, showType);
     if (response) {
-      console.log(response);
       dispatch(loadShowDetailSuccess(response));
     } else {
       dispatch(loadShowDetailError(error));
@@ -61,7 +60,6 @@ function ShowDetail(props) {
     dispatch(changeShowGenresLoadingState());
     let {response, error} = await fetchShowGenres(showId, showType);
     if (response) {
-      console.log(response);
       dispatch(loadShowGenresSuccess(response));
     } else {
       dispatch(loadShowGenresError(error));
