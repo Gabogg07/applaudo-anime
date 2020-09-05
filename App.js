@@ -37,11 +37,11 @@ function App() {
             component={ShowDetailScreen}
             options={{headerShown: false}}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="YoutubeVideo"
             component={YoutubeVideoScreen}
             options={{headerShown: false}}
-          />*/}
+          />
           <Stack.Screen
             name="SearchResults"
             component={SearchResultsScreen}

@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useContext} from 'react';
+import React, {Component, useEffect, useContext, useState} from 'react';
 import {View, FlatList, Dimensions, ActivityIndicator} from 'react-native';
 import ChapterCard from '../ChapterCard/ChapterCard';
 import {connect} from 'react-redux';
@@ -14,6 +14,7 @@ const {width} = Dimensions.get('screen');
  */
 function ChapterCardList(props) {
   const [context, dispatch] = useContext(ShowsContext);
+  const [enableLoadMore, setEnableLoadMore] = useState(false)
 
   async function fetchChapters(showId, url, showType) {
     dispatch(changeShowChaptersLoadingState());
@@ -29,15 +30,18 @@ function ChapterCardList(props) {
     fetchChapters(props.showId, null, props.showType);
   },[]);
 
+  useEffect(()=>{
+    setEnableLoadMore(true)
+  }, [context.chapters.data])
+
   const onEndReached = () => {
     const {chapters} = context;
-    if (!chapters.loading && chapters.links.next) {
+    if (!chapters.loading && chapters.links.next && enableLoadMore) {
       fetchChapters(props.showId, fixUrl(chapters.links.next), props.showType);
     }
   };
 
   const {chapters} = context;
-  console.log('CHAPTERS', chapters)
 
   return (
     <View>
@@ -68,22 +72,10 @@ function ChapterCardList(props) {
             </View>
           );
         }}
-        // onEndReached={onEndReached}
+        onEndReached={onEndReached}
       />
     </View>
   );
 }
 
 export default ChapterCardList;
-
-// const mapStateToProps = (state) => ({
-//   chapters: state.chapters,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   fetchShowChapter: (showId, url, showType) =>
-//     dispatch(fetchShowChapter(showId, url, showType)),
-//   cleanShowData: () => dispatch(cleanShowData()),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(ChapterCardList);
